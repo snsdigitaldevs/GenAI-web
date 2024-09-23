@@ -25,7 +25,6 @@ export default function AboutCard() {
             <li>→ No auth, storage or sharing</li>
             <li></li>
           </ul>
-          <p><Link href="https://github.com/snsdigitaldevs/GenAI-web" className="underline">Fork the repo and get hacking</Link> </p>
         </CardContent>
       </Card>
     </div>

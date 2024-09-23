@@ -11,7 +11,7 @@ export async function Header() {
       </Link>
       <IconSeparator />
       <Link
-        href="/genui"
+        href="/"
         className={cn(buttonVariants({ variant: 'link' }), "mr-auto font-normal")}
       >
         <span className="hidden md:flex">GenUI</span>
