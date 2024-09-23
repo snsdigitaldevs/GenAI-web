@@ -2,12 +2,12 @@
 
 import { createStreamableValue } from 'ai/rsc';
 import { CoreMessage, streamText } from 'ai';
-import { openai } from '@ai-sdk/openai';
 import { Weather } from '@/components/weather';
 import { generateText } from 'ai';
 import { createStreamableUI } from 'ai/rsc';
 import { ReactNode } from 'react';
 import { z } from 'zod';
+import { azure } from '@ai-sdk/azure';
 
 export interface Message {
   role: 'user' | 'assistant';
@@ -15,11 +15,10 @@ export interface Message {
   display?: ReactNode;
 }
 
-
 // Streaming Chat 
 export async function continueTextConversation(messages: CoreMessage[]) {
   const result = await streamText({
-    model: openai('gpt-4-turbo'),
+    model: azure('gpt-4'),
     messages,
   });
 
@@ -32,7 +31,7 @@ export async function continueConversation(history: Message[]) {
   const stream = createStreamableUI();
 
   const { text, toolResults } = await generateText({
-    model: openai('gpt-3.5-turbo'),
+    model: azure('gpt-4'),
     system: 'You are a friendly weather assistant!',
     messages: history,
     tools: {
@@ -63,10 +62,4 @@ export async function continueConversation(history: Message[]) {
       },
     ],
   };
-}
-
-// Utils
-export async function checkAIAvailability() {
-  const envVarExists = !!process.env.OPENAI_API_KEY;
-  return envVarExists;
 }
