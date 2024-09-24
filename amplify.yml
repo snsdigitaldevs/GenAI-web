@@ -5,6 +5,7 @@ frontend:
       commands:
         - npm install -g pnpm
         - pnpm install
+        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
     build:
       commands:
         - env | grep -e BEDROCK_AWS_ACCESS_KEY_ID -e BEDROCK_AWS_SECRET_ACCESS_KEY -e BEDROCK_AWS_REGION >> .env.production
