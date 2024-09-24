@@ -23,8 +23,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { client } from "@/lib/client"
-import { Amplify } from 'aws-amplify';
-import outputs from '../../../../amplify_outputs.json';
 import { useState } from "react"
 
 const FormSchema = z.object({
@@ -51,7 +49,6 @@ export function NewTask() {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true)
     console.info(`Submitting task: ${data.originLanguage} -> ${data.targetLanguage}`)
-    Amplify.configure(outputs);
     const task = await client.models.tasks.create({
       origin: data.originLanguage,
       target: data.targetLanguage,
