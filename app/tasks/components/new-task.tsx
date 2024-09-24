@@ -1,6 +1,6 @@
 "use client"
 
-import {Button} from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -9,22 +9,21 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog"
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form"
-import {Input} from "@/components/ui/input"
-import {zodResolver} from "@hookform/resolvers/zod"
-import {useForm} from "react-hook-form"
-import {z} from "zod"
-
-import {useState} from "react"
-
-import type {Schema} from '@/amplify/data/resource'
-import {generateClient} from 'aws-amplify/data'
-import {Amplify} from 'aws-amplify';
-import outputs from "@/amplify_outputs.json";
-
-Amplify.configure(outputs);
-
-const client = generateClient<Schema>()
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { client } from "@/lib/client"
+import { useState } from "react"
 
 const FormSchema = z.object({
   originLanguage: z.string().min(2, {
