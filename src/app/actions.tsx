@@ -7,7 +7,7 @@ import { generateText } from 'ai';
 import { createStreamableUI } from 'ai/rsc';
 import { ReactNode } from 'react';
 import { z } from 'zod';
-import { azure } from '@ai-sdk/azure';
+import { bedrock } from '@ai-sdk/amazon-bedrock';
 
 export interface Message {
   role: 'user' | 'assistant';
@@ -15,10 +15,12 @@ export interface Message {
   display?: ReactNode;
 }
 
+const model = bedrock('anthropic.claude-3-5-sonnet-20240620-v1:0');
+
 // Streaming Chat 
 export async function continueTextConversation(messages: CoreMessage[]) {
   const result = await streamText({
-    model: azure('gpt-4'),
+    model: model,
     messages,
   });
 
@@ -31,7 +33,7 @@ export async function continueConversation(history: Message[]) {
   const stream = createStreamableUI();
 
   const { text, toolResults } = await generateText({
-    model: azure('gpt-4'),
+    model: model,
     system: 'You are a friendly weather assistant!',
     messages: history,
     tools: {
