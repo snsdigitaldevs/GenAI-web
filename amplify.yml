@@ -7,7 +7,7 @@ frontend:
         - pnpm install
     build:
       commands:
-        - env | grep -e AZURE_RESOURCE_NAME -e AZURE_API_KEY >> .env.production
+        - env | grep -e BEDROCK_AWS_ACCESS_KEY_ID -e BEDROCK_AWS_SECRET_ACCESS_KEY -e BEDROCK_AWS_REGION >> .env.production
         - pnpm run build
   artifacts:
     baseDirectory: .next
