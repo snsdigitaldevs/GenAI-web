@@ -14,9 +14,6 @@ export const env = createEnv({
     AWS_ACCESS_KEY_ID: z.string(),
     AWS_SECRET_ACCESS_KEY: z.string(),
     AWS_REGION: z.string(),
-    NODE_ENV: z
-      .enum(["development", "production"])
-      .default("development"),
   },
 
   /**
@@ -37,7 +34,6 @@ export const env = createEnv({
     AWS_ACCESS_KEY_ID: process.env.BEDROCK_AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.BEDROCK_AWS_SECRET_ACCESS_KEY,
     AWS_REGION: process.env.BEDROCK_AWS_REGION,
-    NODE_ENV: process.env.NODE_ENV,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
