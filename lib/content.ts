@@ -4,7 +4,7 @@ export const defaultEditorContent = {
     {
       type: "heading",
       attrs: { level: 2 },
-      content: [{ type: "text", text: "Introducing Novel" }],
+      content: [{ type: "text", text: "Introducing GenAI-Web" }],
     },
     {
       type: "paragraph",
@@ -15,12 +15,12 @@ export const defaultEditorContent = {
             {
               type: "link",
               attrs: {
-                href: "https://github.com/steven-tey/novel",
+                href: "https://github.com/snsdigitaldevs/GenAI-web",
                 target: "_blank",
               },
             },
           ],
-          text: "Novel",
+          text: "GenAI-Web",
         },
         {
           type: "text",
@@ -64,7 +64,7 @@ export const defaultEditorContent = {
     {
       type: "codeBlock",
       attrs: { language: null },
-      content: [{ type: "text", text: "npm i novel" }],
+      content: [{ type: "text", text: "https://github.com/snsdigitaldevs/GenAI-web.git" }],
     },
     {
       type: "heading",
@@ -77,7 +77,7 @@ export const defaultEditorContent = {
       content: [
         {
           type: "text",
-          text: 'import { Editor } from "novel";\n\nexport default function App() {\n  return (\n     <Editor />\n  )\n}',
+          text: 'npm install\n\nnpm run dev',
         },
       ],
     },
@@ -140,63 +140,13 @@ export const defaultEditorContent = {
                     {
                       type: "link",
                       attrs: {
-                        href: "https://github.com/steven-tey/novel",
+                        href: "https://github.com/snsdigitaldevs/GenAI-web",
                         target: "_blank",
                       },
                     },
                   ],
                   text: "GitHub",
                 },
-              ],
-            },
-          ],
-        },
-        {
-          type: "taskItem",
-          attrs: { checked: false },
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                { type: "text", text: "Install the " },
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "link",
-                      attrs: {
-                        href: "https://www.npmjs.com/package/novel",
-                        target: "_blank",
-                      },
-                    },
-                  ],
-                  text: "NPM package",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "taskItem",
-          attrs: { checked: false },
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "link",
-                      attrs: {
-                        href: "https://vercel.com/templates/next.js/novel",
-                        target: "_blank",
-                      },
-                    },
-                  ],
-                  text: "Deploy your own",
-                },
-                { type: "text", text: " to Vercel" },
               ],
             },
           ],
