@@ -7,22 +7,13 @@ import { generateText } from 'ai';
 import { createStreamableUI } from 'ai/rsc';
 import { ReactNode } from 'react';
 import { z } from 'zod';
-import {createAmazonBedrock} from '@ai-sdk/amazon-bedrock';
-import {env} from "@/env"
+import { model } from '@/lib/ai';
 
 export interface Message {
   role: 'user' | 'assistant';
   content: string;
   display?: ReactNode;
 }
-
-const bedrock = createAmazonBedrock({
-  region: env.AWS_REGION,
-  accessKeyId: env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: env.AWS_SECRET_ACCESS_KEY
-});
-
-const model = bedrock('anthropic.claude-3-5-sonnet-20240620-v1:0');
 
 // Streaming Chat 
 export async function continueTextConversation(messages: CoreMessage[]) {
