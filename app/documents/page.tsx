@@ -1,4 +1,4 @@
-import TailwindAdvancedEditor from "@/components/tailwind/advanced-editor";
+import TailwindAdvancedEditor from "@/components/editor/advanced-editor";
 
 export default function Page() {
   return (
