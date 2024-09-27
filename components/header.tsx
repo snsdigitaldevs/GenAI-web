@@ -1,13 +1,11 @@
+import SignIn from '@/components/sign-in'
 import { IconSeparator } from '@/components/ui/icons'
 import Link from 'next/link'
-import SignIn from '@/components/sign-in'
-import { auth } from '@/auth'
 
 export async function Header() {
-  const session = await auth()
   return (
     <header className="sticky top-0 z-50 flex items-center w-full h-16 px-4 border-b shrink-0 bg-white ">  
-      {session ? undefined : <SignIn /> }
+      <SignIn />
 
       <IconSeparator />
 
