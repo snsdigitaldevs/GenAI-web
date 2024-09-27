@@ -9,7 +9,7 @@ frontend:
   phases:
     build:
       commands:
-        - env | grep -e BEDROCK_ -e AUTH >> .env.production
+        - env | grep -e BEDROCK_ -e AUTH_ >> .env.production
         - npm run build
   artifacts:
     baseDirectory: .next
