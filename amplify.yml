@@ -9,9 +9,14 @@ frontend:
   phases:
     build:
       commands:
-        - env | grep -e BEDROCK_AWS_ACCESS_KEY_ID -e BEDROCK_AWS_SECRET_ACCESS_KEY -e BEDROCK_AWS_REGION -e AUTH_AUTH0_ISSUER -e AUTH_AUTH0_ID -e AUTH_AUTH0_SECRET -e AUTH_SECRET -e AUTH_TRUST_HOST >> .env.production
+        - env | grep -e BEDROCK_ -e AUTH >> .env.production
         - npm run build
   artifacts:
     baseDirectory: .next
     files:
       - '**/*'
+  cache:
+    paths:
+      - .next/cache/**/*
+      - .npm/**/*
+      - node_modules/**/*
