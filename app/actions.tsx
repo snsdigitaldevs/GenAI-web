@@ -1,65 +1,139 @@
-'use server';
+'use server'
 
-import { createStreamableValue } from 'ai/rsc';
-import { CoreMessage, streamText } from 'ai';
-import { Weather } from '@/components/weather';
-import { generateText } from 'ai';
-import { createStreamableUI } from 'ai/rsc';
-import { ReactNode } from 'react';
-import { z } from 'zod';
-import { model } from '@/lib/ai';
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
-export interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-  display?: ReactNode;
+import { auth } from '@/auth'
+import { type Chat } from '@/lib/types'
+import { cookieBasedClient as client } from "@/lib/server"
+
+export async function getChats(email?: string | null) {
+  const session = await auth()
+
+  if (!email) {
+    return []
+  }
+
+  if (email !== session?.user?.email) {
+    return {
+      error: 'Unauthorized'
+    }
+  }
+
+  try {
+    const chats = await client.models.chats.list({
+      filter: {
+        email: { eq: email },
+      },
+    })
+
+    return chats.data.map((chat) => ({
+      ...chat,
+      messages: JSON.parse(chat.messages),
+    })) as Chat[]
+  } catch (error) {
+    return []
+  }
 }
 
-// Streaming Chat 
-export async function continueTextConversation(messages: CoreMessage[]) {
-  const result = await streamText({
-    model: model,
-    messages,
-  });
+export async function getChat(id: string, email: string) {
+  const session = await auth()
 
-  const stream = createStreamableValue(result.textStream);
-  return stream.value;
+  console.log('getChat', id, email)
+
+  if (email !== session?.user?.email) {
+    return {
+      error: 'Unauthorized'
+    }
+  }
+
+  const chats = await client.models.chats.list({
+    filter: {
+      chatId: { eq: id },
+    }
+  })
+
+  const chat = chats.data[0]
+
+  console.log('getChat funcition', chat)
+
+  if (!chat || (email && chat?.email !== email)) {
+    return null
+  }
+
+  return chat
 }
 
-// Gen UIs 
-export async function continueConversation(history: Message[]) {
-  const stream = createStreamableUI();
+export async function removeChat({ id, path }: { id: string; path: string }) {
+  const session = await auth()
 
-  const { text, toolResults } = await generateText({
-    model: model,
-    system: 'You are a friendly weather assistant!',
-    messages: history,
-    tools: {
-      showWeather: {
-        description: 'Show the weather for a given location.',
-        parameters: z.object({
-          city: z.string().describe('The city to show the weather for.'),
-          unit: z
-            .enum(['F'])
-            .describe('The unit to display the temperature in'),
-        }),
-        execute: async ({ city, unit }) => {
-          stream.done(<Weather city={city} unit={unit} />);
-          return `Here's the weather for ${city}!`; 
-        },
-      },
-    },
-  });
+  if (!session) {
+    return {
+      error: 'Unauthorized'
+    }
+  }
 
-  return {
-    messages: [
-      ...history,
-      {
-        role: 'assistant' as const,
-        content:
-          text || toolResults.map(toolResult => toolResult.result).join(),
-        display: stream.value,
-      },
-    ],
-  };
+  const chat = await client.models.chats.get({
+    id,
+  })
+
+  if (chat.data?.email !== session?.user?.email) {
+    return {
+      error: 'Unauthorized'
+    }
+  }
+
+  await client.models.chats.delete({
+    id,
+  })
+
+  revalidatePath('/')
+  return revalidatePath(path)
+}
+
+export async function clearChats() {
+  const session = await auth()
+
+  if (!session?.user?.email) {
+    return {
+      error: 'Unauthorized'
+    }
+  }
+
+  const chats = await client.models.chats.list({
+    filter: {
+      email: { eq: session.user.email },
+    }
+  })
+
+  chats.data.forEach(async (chat) => {
+    await client.models.chats.delete({
+      id: chat.id,
+    })
+  })
+
+  revalidatePath('/')
+  return redirect('/')
+}
+
+export async function saveChat(chat: Chat) {
+  const session = await auth()
+
+  if (session && session.user) {
+    console.log('saveChat', chat)
+    const result = await client.models.chats.create({
+      chatId: chat.id,
+      email: session.user.email,
+      messages: JSON.stringify(chat.messages),
+      title: chat.title,
+      path: chat.path,
+    })
+    console.log('saveChat result', result)
+  } else {
+    return
+  }
+}
+
+export async function refreshHistory(path: string) {
+  redirect(path)
 }

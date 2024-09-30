@@ -6,7 +6,15 @@ const schema = a.schema({
       target: a.string(),
       status: a.string(),
     })
-    .authorization(allow => [allow.publicApiKey()])
+    .authorization(allow => [allow.publicApiKey()]),
+  chats: a.model({
+    chatId: a.string(),
+    email: a.string(),
+    messages: a.string().required(),
+    title: a.string(),
+    path: a.string(),
+  })
+  .authorization(allow => [allow.publicApiKey()]),
 });
 
 // Used for code completion / highlighting when making requests from frontend
