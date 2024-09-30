@@ -14,26 +14,26 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
+                                     children,
+                                   }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <Toaster position="top-center" />
-        <Providers
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex flex-col flex-1 bg-muted/50">{children}</main>
-          </div>
-        </Providers>
-      </body>
+    <body className={inter.className}>
+    <Toaster position="top-center" />
+    <Providers
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex flex-col flex-1 bg-muted/50">{children}</main>
+      </div>
+    </Providers>
+    </body>
     </html>
   );
 }
