@@ -21,7 +21,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
     async authorized({ auth }: { auth: any }) {
-      return !!auth && auth.user?.roles?.includes('ECOM_ADMIN_TEST');
+      return !!auth && auth.user?.roles?.includes('GenAI-ADMIN');
     }
   }
 })
