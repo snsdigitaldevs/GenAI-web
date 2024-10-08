@@ -42,17 +42,19 @@ export async function Header() {
 
         <IconSeparator />
 
-        <Link
-          href="/tasks"
-        >
+        <Link href="/">
+          <span className="hidden md:flex">Chat</span>
+        </Link>
+
+        <IconSeparator />
+
+        <Link href="/tasks">
           <span className="hidden md:flex">Tasks</span>
         </Link>
 
         <IconSeparator />
 
-        <Link
-          href="/documents"
-        >
+        <Link href="/documents">
           <span className="hidden md:flex">Documents</span>
         </Link>
       </section>
