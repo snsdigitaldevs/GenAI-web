@@ -13,9 +13,7 @@ export const metadata: Metadata = {
   description: "AI with Next and AI SDK",
 };
 
-export default function RootLayout({
-                                     children,
-                                   }: Readonly<{
+export default function RootLayout({ children }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (

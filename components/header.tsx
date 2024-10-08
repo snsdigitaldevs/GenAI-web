@@ -11,7 +11,7 @@ import Link from 'next/link'
 import React from 'react'
 
 async function UserOrLogin() {
-  const session = (await auth()) as Session
+  const session = (await auth()) as Session;
   return (
     <>
       {session?.user ? (
@@ -27,40 +27,43 @@ async function UserOrLogin() {
           <IconNextChat className="hidden size-6 mr-2 dark:block" />
         </Link>
       )}
+    </>
+  )
+}
+
+export async function Header() {
+  const session = await auth();
+  return (
+    <header className="sticky top-0 z-50 flex justify-between w-full h-16 px-4 border-b shrink-0 bg-white ">
+      <section className='flex items-center'>
+        <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
+          <UserOrLogin />
+        </React.Suspense>
+
+        <IconSeparator />
+
+        <Link
+          href="/tasks"
+        >
+          <span className="hidden md:flex">Tasks</span>
+        </Link>
+
+        <IconSeparator />
+
+        <Link
+          href="/documents"
+        >
+          <span className="hidden md:flex">Documents</span>
+        </Link>
+      </section>
+
       <div className="flex items-center">
-        <IconSeparator className="size-6 text-muted-foreground/50" />
         {session?.user ? (
           <UserMenu user={session.user as User} />
         ) : (
           <SignIn />
         )}
       </div>
-    </>
-  )
-}
-
-export async function Header() {
-  return (
-    <header className="sticky top-0 z-50 flex items-center w-full h-16 px-4 border-b shrink-0 bg-white ">
-      <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
-        <UserOrLogin />
-      </React.Suspense>
-
-      <IconSeparator />
-
-      <Link
-        href="/tasks"
-      >
-        <span className="hidden md:flex">Tasks</span>
-      </Link>
-
-      <IconSeparator />
-
-      <Link
-        href="/documents"
-      >
-        <span className="hidden md:flex">Documents</span>
-      </Link>
     </header>
   )
 }
