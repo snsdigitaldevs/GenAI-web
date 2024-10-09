@@ -21,6 +21,11 @@ const schema = a.schema({
     text: a.string(),
   })
   .authorization(allow => [allow.publicApiKey()]),
+  prompts: a.model({
+    type: a.string(),
+    text: a.string(),
+  })
+  .authorization(allow => [allow.publicApiKey()]),
 });
 
 // Used for code completion / highlighting when making requests from frontend
