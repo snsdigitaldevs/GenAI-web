@@ -3,7 +3,8 @@ import { ChatHistory } from '@/components/chat/chat-history'
 import { SidebarMobile } from '@/components/chat/sidebar-mobile'
 import { SidebarToggle } from '@/components/chat/sidebar-toggle'
 import SignIn from '@/components/sign-in'
-import { IconNextChat, IconSeparator } from '@/components/ui/icons'
+import { IconNextChat } from '@/components/ui/icons'
+import { DividerVerticalIcon } from '@radix-ui/react-icons'
 import { UserMenu } from '@/components/user-menu'
 import { User } from '@/lib/types'
 import { Session } from 'next-auth'
@@ -36,23 +37,18 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-50 flex justify-between w-full h-16 px-4 border-b shrink-0 bg-white ">
       <section className='flex items-center'>
-        <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
-          <UserOrLogin />
-        </React.Suspense>
-
-        <IconSeparator />
 
         <Link href="/">
-          <span className="hidden md:flex">Chat</span>
+          <span className="hidden md:flex">Home</span>
         </Link>
 
-        <IconSeparator />
+        <DividerVerticalIcon />
 
         <Link href="/courses">
           <span className="hidden md:flex">Courses</span>
         </Link>
 
-        <IconSeparator />
+        <DividerVerticalIcon />
 
         <Link href="/documents">
           <span className="hidden md:flex">Documents</span>
