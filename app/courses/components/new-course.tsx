@@ -24,6 +24,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { client } from "@/lib/client"
 import { useState } from "react"
+import { Textarea } from "@/components/ui/textarea"
 
 const FormSchema = z.object({
   originLanguage: z.string().min(2, {
@@ -32,9 +33,11 @@ const FormSchema = z.object({
   targetLanguage: z.string().min(2, {
     message: "Target Language must be at least 2 characters.",
   }),
+  description: z.string().optional(),
+  prompt: z.string().optional(),
 })
 
-export function NewTask() {
+export function NewCourse() {
   const [loading, setLoading] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
@@ -49,10 +52,11 @@ export function NewTask() {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true)
     console.info(`Submitting task: ${data.originLanguage} -> ${data.targetLanguage}`)
-    const task = await client.models.tasks.create({
+    const task = await client.models.courses.create({
       origin: data.originLanguage,
       target: data.targetLanguage,
-      status: "In Progress",
+      prompt: data.prompt,
+      description: data.description,
     })
     console.info(`Task submitted: ${JSON.stringify(task)}`)
     setLoading(false)
@@ -64,15 +68,15 @@ export function NewTask() {
       <DialogTrigger asChild>
         <Button onClick={() => setIsDialogOpen(true)}>New Task</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
-          <DialogTitle>Add New Task</DialogTitle>
+          <DialogTitle>Add New Course</DialogTitle>
           <DialogDescription>
-            Add a new task to your list.
+            Add a new course to your list.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
         <FormField
           control={form.control}
           name="originLanguage"
@@ -100,6 +104,46 @@ export function NewTask() {
               </FormControl>
               <FormDescription>
                 This is your target language.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="prompt"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Prompt</FormLabel>
+              <FormControl>
+                <Textarea
+                    placeholder="Optional"
+                    className="resize-none"
+                    {...field}
+                  />
+              </FormControl>
+              <FormDescription>
+                This is your prompt.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Optional"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>
+                This is your description.
               </FormDescription>
               <FormMessage />
             </FormItem>

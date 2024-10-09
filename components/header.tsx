@@ -48,8 +48,8 @@ export async function Header() {
 
         <IconSeparator />
 
-        <Link href="/tasks">
-          <span className="hidden md:flex">Tasks</span>
+        <Link href="/courses">
+          <span className="hidden md:flex">Courses</span>
         </Link>
 
         <IconSeparator />

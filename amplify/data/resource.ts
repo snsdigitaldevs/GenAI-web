@@ -1,10 +1,11 @@
 import { a, defineData, type ClientSchema } from '@aws-amplify/backend';
 
 const schema = a.schema({
-  tasks: a.model({
+  courses: a.model({
       origin: a.string(),
       target: a.string(),
-      status: a.string(),
+      prompt: a.string(),
+      description: a.string(),
   })
   .authorization(allow => [allow.publicApiKey()]),
   chats: a.model({
