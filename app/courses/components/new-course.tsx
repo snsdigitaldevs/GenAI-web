@@ -55,19 +55,25 @@ export function NewCourse() {
     setLoading(true)
     console.info(`Submitting task: ${data.originLanguage} -> ${data.targetLanguage}`)
 
-    const structureVocabulary = await generateStructuresAndVocabulary(data.targetLanguage)
-    console.info(`Structure Vocabulary: ${structureVocabulary}`)
-
-    const task = await client.models.courses.create({
-      origin: data.originLanguage,
-      target: data.targetLanguage,
-      prompt: data.prompt,
-      description: data.description,
-      structure_vocabulary: JSON.stringify(structureVocabulary),
-    })
-    console.info(`Task submitted: ${JSON.stringify(task)}`)
-    setLoading(false)
-    setIsDialogOpen(false)
+    try {
+      const structureVocabulary = await generateStructuresAndVocabulary(data.targetLanguage)
+      console.info(`Structure Vocabulary: ${structureVocabulary}`)
+  
+      const task = await client.models.courses.create({
+        origin: data.originLanguage,
+        target: data.targetLanguage,
+        prompt: data.prompt,
+        description: data.description,
+        structure_vocabulary: JSON.stringify(structureVocabulary),
+      })
+      console.info(`Task submitted: ${JSON.stringify(task)}`)
+      setLoading(false)
+      setIsDialogOpen(false)
+    } catch (error) {
+      console.error(`Error submitting task: ${error}`)
+      setLoading(false)
+      setIsDialogOpen(false)
+    }
   }
 
   return (

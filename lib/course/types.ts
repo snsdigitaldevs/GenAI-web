@@ -11,9 +11,6 @@ const UnitSchema = z.object({
   vocabulary: z.array(LanguagePairSchema),
 });
 
-const LanguageUnitsSchema = z.array(UnitSchema);
-
 export type LanguageUnit = z.infer<typeof UnitSchema>;
-export type LanguageUnits = z.infer<typeof LanguageUnitsSchema>;
 
-export default LanguageUnitsSchema;
+export default UnitSchema;

@@ -1,7 +1,8 @@
 'use server'
+
 import { Course } from "@/app/courses/data/schema";
 import { model } from "@/lib/ai";
-import LanguageUnitsSchema from "@/lib/course/types";
+import UnitSchema, { LanguageUnit } from "@/lib/course/types";
 import { cookieBasedClient as client } from "@/lib/server";
 import { generateObject } from 'ai';
 
@@ -13,9 +14,11 @@ export async function getCourses() {
 export async function generateStructuresAndVocabulary(targetLanguage: string) {
   const prompts =  await client.models.prompts.list({
       filter: {
-        type: { eq: 'S&C Prompt' },
+        type: { eq: 'S&V' },
       },
   })
+
+  console.log("prompts", prompts)
 
   const prompt = prompts.data[0].text
 
@@ -23,28 +26,37 @@ export async function generateStructuresAndVocabulary(targetLanguage: string) {
     throw new Error('Prompt not found')
   }
 
+
   const allStructuresAndVocabulary = await client.models.resources.list({
     filter: {
-      type: { eq: 'S&C' },
-      index: { eq: 0 },
+      type: { eq: 'S&V' },
     },
   })
 
-  const allStructuresAndVocabularyText = allStructuresAndVocabulary.data[0].text
+  console.log("allStructuresAndVocabulary", allStructuresAndVocabulary)
 
-  if (!allStructuresAndVocabularyText) {
+  const svTextArray = allStructuresAndVocabulary.data.map((sv) => sv.text!)
+
+  if (!svTextArray) {
     throw new Error('Structures and Vocabulary not found')
   }
 
-  const finalPrompt = prompt?.replace('{target_language}', targetLanguage).replace('{replace_S&C}', allStructuresAndVocabularyText)
-
-  const { object: data } = await generateObject({
-    model: model,
-    schema: LanguageUnitsSchema,
-    prompt: finalPrompt,
+  const unitPromises = svTextArray.map(async (sv) => {
+    const finalPrompt = prompt?.replace('{target_language}', targetLanguage).replace('{replace_S&V}', sv)
+    console.log("finalPrompt", finalPrompt)
+    const { object: data } = await generateObject({
+      model: model,
+      schema: UnitSchema,
+      output: "object",
+      prompt: finalPrompt,
+    });
+    console.log("generateStructuresAndVocabulary", data)
+    return data as LanguageUnit;
   });
-  console.log("generateStructuresAndVocabulary", data)
 
-  return data;
+  const units = await Promise.all(unitPromises);
+
+  console.log("generated units", units)
+
+  return units;
 }
-
