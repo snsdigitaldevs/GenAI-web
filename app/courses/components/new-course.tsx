@@ -86,84 +86,84 @@ export function NewCourse() {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-        <FormField
-          control={form.control}
-          name="originLanguage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Origin Language</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your origin language.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="targetLanguage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Target Language</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your target language.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="prompt"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Prompt</FormLabel>
-              <FormControl>
-                <Textarea
-                    placeholder="Optional"
-                    className="resize-none"
-                    {...field}
-                  />
-              </FormControl>
-              <FormDescription>
-                This is your prompt.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Optional"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                This is your description.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={loading}>
-          {loading ? "Submitting..." : "Submit"}
-        </Button>
-      </form>
-    </Form>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+            <FormField
+              control={form.control}
+              name="originLanguage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Origin Language</FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your origin language.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="targetLanguage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Target Language</FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your target language.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="prompt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Prompt</FormLabel>
+                  <FormControl>
+                    <Textarea
+                        placeholder="Optional"
+                        className="resize-none"
+                        {...field}
+                      />
+                  </FormControl>
+                  <FormDescription>
+                    This is your prompt.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Optional"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    This is your description.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" disabled={loading}>
+              {loading ? "Submitting..." : "Submit"}
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )
