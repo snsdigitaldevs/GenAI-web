@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+package.json
+package-lock.json
+*.md
+
+# Compiled output
+dist/
+
+# Test coverage
+coverage
+
+
+# Editors and IDEs
+.idea
+.vscode/*
+

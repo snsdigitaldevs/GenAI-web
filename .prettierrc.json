@@ -1,0 +1,20 @@
+{
+  "endOfLine": "auto",
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "arrowParens": "always",
+  "semi": true,
+  "printWidth": 140,
+  "jsxSingleQuote": true,
+  "overrides": [
+    {
+      "files": ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}", "./lib/**/*.{js,jsx,ts,tsx}"],
+      "options": {
+        "plugins": [
+          "prettier-plugin-tailwindcss"
+        ]
+      }
+    }
+  ]
+}
