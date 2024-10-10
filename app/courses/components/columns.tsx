@@ -56,7 +56,7 @@ export const columns: ColumnDef<Course>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Description" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("description")}</div>,
+    cell: ({ row }) => <div className="w-[320px]">{row.getValue("description")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -65,7 +65,7 @@ export const columns: ColumnDef<Course>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Prompt" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("prompt")}</div>,
+    cell: ({ row }) => <div className="w-[320px]">{row.getValue("prompt")}</div>,
     enableSorting: false,
     enableHiding: false,
   },

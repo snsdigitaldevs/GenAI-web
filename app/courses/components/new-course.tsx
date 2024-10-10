@@ -25,6 +25,8 @@ import { z } from "zod"
 import { client } from "@/lib/client"
 import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
+import { PlusCircledIcon } from '@radix-ui/react-icons'
+import { generateStructuresAndVocabulary } from "../actions"
 
 const FormSchema = z.object({
   originLanguage: z.string().min(2, {
@@ -52,11 +54,16 @@ export function NewCourse() {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true)
     console.info(`Submitting task: ${data.originLanguage} -> ${data.targetLanguage}`)
+
+    const structureVocabulary = await generateStructuresAndVocabulary(data.targetLanguage)
+    console.info(`Structure Vocabulary: ${structureVocabulary}`)
+
     const task = await client.models.courses.create({
       origin: data.originLanguage,
       target: data.targetLanguage,
       prompt: data.prompt,
       description: data.description,
+      structure_vocabulary: JSON.stringify(structureVocabulary),
     })
     console.info(`Task submitted: ${JSON.stringify(task)}`)
     setLoading(false)
@@ -66,7 +73,10 @@ export function NewCourse() {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setIsDialogOpen(true)}>New Task</Button>
+        <Button onClick={() => setIsDialogOpen(true)}>
+          <PlusCircledIcon className="size-4 mr-2" />
+          Add Course
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl">
         <DialogHeader>

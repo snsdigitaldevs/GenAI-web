@@ -6,6 +6,7 @@ const schema = a.schema({
       target: a.string(),
       prompt: a.string(),
       description: a.string(),
+      structure_vocabulary: a.string(),
   })
   .authorization(allow => [allow.publicApiKey()]),
   chats: a.model({
@@ -27,6 +28,7 @@ const schema = a.schema({
     text: a.string(),
   })
   .authorization(allow => [allow.publicApiKey()]),
+
 });
 
 // Used for code completion / highlighting when making requests from frontend
