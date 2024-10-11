@@ -8,6 +8,7 @@ export const courseSchema = z.object({
   target: z.string(),
   prompt: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
+  structure_vocabulary: z.string().optional().nullable(),
 })
 
 export type Course = z.infer<typeof courseSchema>

@@ -11,6 +11,11 @@ export async function getCourses() {
   return data as Course[]
 }
 
+export async function getCourse(courseId: string) {
+  const { data, errors } = await client.models.courses.get({ id: courseId })
+  return data as Course
+}
+
 export async function generateStructuresAndVocabulary(targetLanguage: string) {
   const prompts =  await client.models.prompts.list({
       filter: {
