@@ -24,7 +24,8 @@ export default function CoursePage({ params }: CoursePageProps) {
     getCourseById(params.id).then((course) => {
       console.log(course)
       setCourse(course);
-      setUnits(JSON.parse(course?.structure_vocabulary || ""));
+      const sortedUnits = JSON.parse(course?.structure_vocabulary || "").sort((a: LanguageUnit, b: LanguageUnit) => a.unit - b.unit);
+      setUnits(sortedUnits);
     })
   }, [params.id]);
 
@@ -71,8 +72,8 @@ export default function CoursePage({ params }: CoursePageProps) {
               key={unit.unit} 
               unit={unit} 
               unitIndex={unitIndex} 
-              originLanguage={course?.origin || 'Origin'}
-              targetLanguage={course?.target || 'Target'}
+              originLanguage={course?.origin || LanguagePairField.ORIGIN}
+              targetLanguage={course?.target || LanguagePairField.TARGET}
               handleItemChange={handleItemChange} 
               addItem={addItem} 
             />
