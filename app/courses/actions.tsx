@@ -1,12 +1,12 @@
 'use server'
 
 import { model } from "@/lib/ai";
-import UnitSchema, {Course, LanguageUnit, Script} from "@/lib/course/types";
+import UnitSchema, { Course, LanguageUnit, Script } from "@/lib/course/types";
 import { cookieBasedClient as client } from "@/lib/server";
-import { generateObject } from 'ai';
+import { generateObject, generateText } from 'ai';
 
 export async function getCourses() {
-  const { data, errors } =  await client.models.courses.list()
+  const { data, errors } = await client.models.courses.list()
   return data as Course[]
 }
 
@@ -16,7 +16,7 @@ export async function getCourse(courseId: string) {
 }
 
 export async function getScript(courseId: string, lessonId: number): Promise<Script> {
-  const {data, errors} = await client.models.scripts.list({
+  const { data, errors } = await client.models.scripts.list({
     filter: {
       courseId: { eq: courseId },
       lessonId: { eq: lessonId },
@@ -25,6 +25,7 @@ export async function getScript(courseId: string, lessonId: number): Promise<Scr
   if (errors) {
     console.error(`getScript error: ${errors}`)
   }
+  console.log("getScript", data)
   return data[0] as Script
 }
 
@@ -38,20 +39,7 @@ export async function createScript(courseId: string, lessons: LanguageUnit[]) {
 }
 
 export async function generateStructuresAndVocabulary(targetLanguage: string) {
-  const prompts =  await client.models.prompts.list({
-      filter: {
-        type: { eq: 'S&V' },
-      },
-  })
-
-  console.log("prompts", prompts)
-
-  const prompt = prompts.data[0].text
-
-  if (!prompt) {
-    throw new Error('Prompt not found')
-  }
-
+  const prompt = await getPrompt('S&V')
 
   const allStructuresAndVocabulary = await client.models.resources.list({
     filter: {
@@ -89,4 +77,67 @@ export async function generateStructuresAndVocabulary(targetLanguage: string) {
 
 export async function deleteCourse(courseId: string) {
   await client.models.courses.delete({ id: courseId })
+}
+
+export async function generateScript(lessonId: number, targetLanguage: string) {
+  const prompt = await getPrompt('script')
+
+  const { data, errors } = await client.models.resources.list({
+    filter: {
+      type: { eq: 'S&V' },
+      index: { eq: lessonId },
+    },
+  })
+
+  const svJsonString = data[0].text!
+
+  const { data: scriptData, errors: scriptErrors } = await client.models.resources.list({
+    filter: {
+      type: { eq: 'script' },
+      index: { eq: lessonId },
+    },
+  })
+
+  const scriptText = scriptData[0].text!
+
+  const finalPrompt = prompt
+    .replace('{replace_S&V}', svJsonString)
+    .replace('{replace_script}', scriptText)
+    .replace('{target_language}', targetLanguage)
+
+  console.log("finalPrompt", finalPrompt)
+
+  const { text } = await generateText({
+    model: model,
+    prompt: finalPrompt,
+  })
+
+  console.log("generated text", text)
+
+  return text
+}
+
+export const updateScript = async (id: string, text: string) => {
+  console.log("updateScript", id)
+  const { data, errors } = await client.models.scripts.update({ id: id, text: text })
+  if (errors) {
+    console.error(`updateScript error: ${errors}`)
+    throw new Error(`updateScript error: ${errors}`)
+  }
+  return data!
+}
+
+const getPrompt = async (type: string) => {
+  const prompts = await client.models.prompts.list({
+    filter: {
+      type: { eq: type },
+    },
+  })
+
+  const prompt = prompts.data[0].text
+
+  if (!prompt) {
+    throw new Error('Prompt not found')
+  }
+  return prompt
 }

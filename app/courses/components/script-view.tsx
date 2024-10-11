@@ -1,17 +1,34 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Script } from "@/lib/course/types";
+import { Course, Script } from "@/lib/course/types";
 import { MagicWandIcon } from "@radix-ui/react-icons";
+import { generateScript, updateScript } from "../actions";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
-export default function ScriptView({ script }: { script: Script}) {
+export default function ScriptView({ script, course }: { script: Script, course: Course }) {
+
+  const [scriptText, setScriptText] = useState(script.text)
+  const [loading, setLoading] = useState(false)
+
+  const generate = async () => {
+    setLoading(true)
+    const text = await generateScript(script.lessonId, course.target)
+    await updateScript(script.id, text)
+    setScriptText(text)
+    setLoading(false)
+  }
+
   return (
-    script.text ? (
+    scriptText ? (
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Script</CardTitle>
         </CardHeader>
         <CardContent>
-          {script.text}
+          <div className="whitespace-pre-wrap">{scriptText}</div>
         </CardContent>
       </Card>
     ) : (
@@ -25,8 +42,8 @@ export default function ScriptView({ script }: { script: Script}) {
             You can start generate script based on your Vocabulary,<br />
             Structures and prompt
           </p>
-          <Button variant="outline">
-            <MagicWandIcon className="mr-2 h-4 w-4" />
+          <Button variant="outline" onClick={() => generate()} disabled={loading}>
+            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <MagicWandIcon className="mr-2 h-4 w-4" />}
             Generate
           </Button>
         </CardContent>

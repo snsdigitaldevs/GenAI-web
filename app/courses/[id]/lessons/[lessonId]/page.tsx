@@ -20,7 +20,7 @@ export default async function LessonPage({ params }: { params: { id: string, les
       <h1 className="text-2xl font-bold mb-4">Lesson {params.lessonId}</h1>
 
       <ScriptPromptEditor script={script} />
-      <ScriptView script={script} />
+      <ScriptView script={script} course={course} />
     </div>
   );
 }
