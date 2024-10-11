@@ -1,6 +1,8 @@
+'use client'
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { LanguageUnit } from "@/lib/course/types"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 
 export default function LessonTable({ lessons, courseId }: { lessons: LanguageUnit[], courseId: string }) {
   const router = useRouter()
