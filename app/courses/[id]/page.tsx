@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
-import { CourseContent } from '../components/course-content'
+import { LessonVocabularyStructure } from '../components/lesson-vocabulary-structure'
 import { getCourseById, updateCourse } from './action'
 import type { Schema } from "@/amplify/data/resource";
 import { LanguageUnit } from '@/lib/course/types'
@@ -20,6 +20,7 @@ export default function CoursePage({ params }: CoursePageProps) {
   const [units, setUnits] = useState<LanguageUnit[]>([]);
   const router = useRouter();
   const [confirmLoading, setConfirmLoading] = useState(false);
+
   useEffect(() => {
     getCourseById(params.id).then((course) => {
       console.log(course)
@@ -68,7 +69,7 @@ export default function CoursePage({ params }: CoursePageProps) {
       <main className="flex-grow container mx-auto p-4">
         <div className="pb-16">
           {units.map((unit, unitIndex) => (
-            <CourseContent 
+            <LessonVocabularyStructure 
               key={unit.unit} 
               unit={unit} 
               unitIndex={unitIndex} 
