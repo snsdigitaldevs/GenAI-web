@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { CourseStructureVocabulary, LanguagePairField } from '../[id]/page'
 import { LanguageUnit } from '@/lib/course/types'
+import { CourseStructureVocabulary, LanguagePairField } from '../type'
 
 interface CourseContentProps {
   unit: LanguageUnit;

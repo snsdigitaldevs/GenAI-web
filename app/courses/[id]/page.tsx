@@ -7,24 +7,15 @@ import { getCourseById, updateCourse } from './action'
 import type { Schema } from "@/amplify/data/resource";
 import { LanguageUnit } from '@/lib/course/types'
 import { useRouter } from 'next/navigation';
+import { CourseStructureVocabulary, LanguagePairField } from '../type';
 
-export interface ChatPageProps {
+interface CoursePageProps {
   params: {
     id: string
   }
 }
 
-export enum CourseStructureVocabulary {
-  STRUCTURE = "structure",
-  VOCABULARY = "vocabulary",
-}
-
-export enum LanguagePairField {
-  ORIGIN = "origin",
-  TARGET = "target",
-}
-
-export default function CoursePage({ params }: ChatPageProps) {
+export default function CoursePage({ params }: CoursePageProps) {
   const [course, setCourse] = useState<Schema["courses"]["type"]>();
   const [units, setUnits] = useState<LanguageUnit[]>([]);
   const router = useRouter();
