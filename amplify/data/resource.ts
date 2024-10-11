@@ -28,7 +28,13 @@ const schema = a.schema({
     text: a.string(),
   })
   .authorization(allow => [allow.publicApiKey()]),
-
+  scripts: a.model({
+    courseId: a.string(),
+    lessonId: a.string(),
+    prompt: a.string(),
+    text: a.string(),
+  })
+  .authorization(allow => [allow.publicApiKey()]),
 });
 
 // Used for code completion / highlighting when making requests from frontend

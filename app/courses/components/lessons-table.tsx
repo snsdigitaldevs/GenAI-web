@@ -1,7 +1,9 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { LanguageUnit } from "@/lib/course/types"
+import { useRouter } from "next/router"
 
-export default function LessonTable({ lessons }: { lessons: LanguageUnit[] }) {
+export default function LessonTable({ lessons, courseId }: { lessons: LanguageUnit[], courseId: string }) {
+  const router = useRouter()
   return (
     <Table>
       <TableHeader>
@@ -13,7 +15,7 @@ export default function LessonTable({ lessons }: { lessons: LanguageUnit[] }) {
       </TableHeader>
       <TableBody>
         {lessons.sort((a, b) => a.unit - b.unit).map((lesson) => (
-          <TableRow key={lesson.unit}>
+          <TableRow key={lesson.unit} onClick={() => router.push(`/courses/${courseId}/lessons/${lesson.unit}`)}>
             <TableCell>{lesson.unit}</TableCell>
             <TableCell>{lesson.vocabulary.length}</TableCell>
             <TableCell>{lesson.structure.length}</TableCell>

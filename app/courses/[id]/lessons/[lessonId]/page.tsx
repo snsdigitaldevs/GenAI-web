@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MagicWandIcon } from "@radix-ui/react-icons";
 
-export default function LessonPage({ params }: { params: { lessonId: string } }) {
+export default function LessonPage({ params }: { params: { id: string, lessonId: string } }) {
   return (
     <div className="container mx-auto p-4 space-y-6">
       <h1 className="text-2xl font-bold mb-4">Lesson 1</h1>
