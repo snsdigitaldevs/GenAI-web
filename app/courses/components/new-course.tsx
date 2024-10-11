@@ -27,7 +27,7 @@ import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { PlusCircledIcon } from '@radix-ui/react-icons'
 import { generateStructuresAndVocabulary } from "../actions"
-
+import { useRouter } from "next/navigation"
 const FormSchema = z.object({
   originLanguage: z.string().min(2, {
     message: "Origin Language must be at least 2 characters.",
@@ -42,6 +42,7 @@ const FormSchema = z.object({
 export function NewCourse() {
   const [loading, setLoading] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -69,6 +70,7 @@ export function NewCourse() {
       console.info(`Task submitted: ${JSON.stringify(task)}`)
       setLoading(false)
       setIsDialogOpen(false)
+      router.push(`/courses/${task.data?.id}`);
     } catch (error) {
       console.error(`Error submitting task: ${error}`)
       setLoading(false)
