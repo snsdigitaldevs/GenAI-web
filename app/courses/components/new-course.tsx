@@ -26,7 +26,7 @@ import { client } from "@/lib/client"
 import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { PlusCircledIcon } from '@radix-ui/react-icons'
-import { generateStructuresAndVocabulary } from "../actions"
+import { createScript, generateStructuresAndVocabulary } from "../actions"
 import { useRouter } from "next/navigation"
 const FormSchema = z.object({
   originLanguage: z.string().min(2, {
@@ -60,17 +60,23 @@ export function NewCourse() {
       const structureVocabulary = await generateStructuresAndVocabulary(data.targetLanguage)
       console.info(`Structure Vocabulary: ${structureVocabulary}`)
   
-      const task = await client.models.courses.create({
+      const course = await client.models.courses.create({
         origin: data.originLanguage,
         target: data.targetLanguage,
         prompt: data.prompt,
         description: data.description,
         structure_vocabulary: JSON.stringify(structureVocabulary),
       })
-      console.info(`Task submitted: ${JSON.stringify(task)}`)
+      console.info(`Course submitted: ${JSON.stringify(course)}`)
+
+      if (!course.data) {
+        throw new Error("Failed to create course")
+      }
+
+      await createScript(course.data.id, structureVocabulary)
       setLoading(false)
       setIsDialogOpen(false)
-      router.push(`/courses/${task.data?.id}`);
+      router.push(`/courses/${course.data?.id}`);
     } catch (error) {
       console.error(`Error submitting task: ${error}`)
       setLoading(false)

@@ -15,14 +15,26 @@ export async function getCourse(courseId: string) {
   return data as Course
 }
 
-export async function getScript(courseId: string, lessonId: number) {
+export async function getScript(courseId: string, lessonId: number): Promise<Script> {
   const {data, errors} = await client.models.scripts.list({
     filter: {
       courseId: { eq: courseId },
       lessonId: { eq: lessonId },
     },
   })
+  if (errors) {
+    console.error(`getScript error: ${errors}`)
+  }
   return data[0] as Script
+}
+
+export async function createScript(courseId: string, lessons: LanguageUnit[]) {
+  lessons.forEach(async (lesson) => {
+    await client.models.scripts.create({
+      courseId: courseId,
+      lessonId: lesson.unit
+    })
+  })
 }
 
 export async function generateStructuresAndVocabulary(targetLanguage: string) {
