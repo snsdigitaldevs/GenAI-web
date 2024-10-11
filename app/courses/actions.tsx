@@ -1,8 +1,7 @@
 'use server'
 
-import { Course } from "@/app/courses/data/schema";
 import { model } from "@/lib/ai";
-import UnitSchema, { LanguageUnit, Script } from "@/lib/course/types";
+import UnitSchema, {Course, LanguageUnit, Script} from "@/lib/course/types";
 import { cookieBasedClient as client } from "@/lib/server";
 import { generateObject } from 'ai';
 

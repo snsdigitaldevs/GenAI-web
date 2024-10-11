@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {useRouter} from "next/navigation"
 
-import {courseSchema} from "../data/schema"
 import { deleteCourse } from "../actions"
+
+import {courseSchema} from "@/lib/course/types";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>

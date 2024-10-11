@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Course } from "../data/schema"
+
+
+import {Course} from "@/lib/course/types";
 
 export default function CourseInfo({ course }: { course: Course }) {
   return (

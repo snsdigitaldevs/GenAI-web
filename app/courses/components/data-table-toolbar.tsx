@@ -1,13 +1,12 @@
 "use client"
 
-import { Cross2Icon } from "@radix-ui/react-icons"
+import {CheckCircledIcon, Cross2Icon, CrossCircledIcon, StopwatchIcon} from "@radix-ui/react-icons"
 import { Table } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DataTableViewOptions } from "./data-table-view-options"
 
-import { statuses } from "../data/data"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
 
 interface DataTableToolbarProps<TData> {
@@ -52,3 +51,21 @@ export function DataTableToolbar<TData>({
     </div>
   )
 }
+
+export const statuses = [
+  {
+    value: "in progress",
+    label: "In Progress",
+    icon: StopwatchIcon,
+  },
+  {
+    value: "done",
+    label: "Done",
+    icon: CheckCircledIcon,
+  },
+  {
+    value: "canceled",
+    label: "Canceled",
+    icon: CrossCircledIcon,
+  },
+]
