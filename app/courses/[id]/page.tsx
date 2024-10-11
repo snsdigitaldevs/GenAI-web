@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
-import { LessonVocabularyStructure } from '../components/lesson-vocabulary-structure'
 import { getCourseById, updateCourse } from './action'
-import type { Schema } from "@/amplify/data/resource";
-import { LanguageUnit } from '@/lib/course/types'
+import { Course, LanguageUnit } from '@/lib/course/types'
 import { useRouter } from 'next/navigation';
 import { CourseStructureVocabulary, LanguagePairField } from '../type';
+import LessonCard from '../components/lesson-card'
 
 interface CoursePageProps {
   params: {
@@ -16,7 +15,7 @@ interface CoursePageProps {
 }
 
 export default function CoursePage({ params }: CoursePageProps) {
-  const [course, setCourse] = useState<Schema["courses"]["type"]>();
+  const [course, setCourse] = useState<Course>();
   const [units, setUnits] = useState<LanguageUnit[]>([]);
   const router = useRouter();
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -30,18 +29,18 @@ export default function CoursePage({ params }: CoursePageProps) {
     })
   }, [params.id]);
 
-  const handleItemChange = (unitIndex: number, type: CourseStructureVocabulary, itemIndex: number, field: LanguagePairField, value: string) => {
+  const handleItemChange = (lessonIndex: number, type: CourseStructureVocabulary, itemIndex: number, field: LanguagePairField, value: string) => {
     setUnits(prevUnits => {
       const newUnits = [...prevUnits]
-      newUnits[unitIndex][type][itemIndex][field] = value
+      newUnits[lessonIndex][type][itemIndex][field] = value
       return newUnits
     })
   }
 
-  const addItem = (unitIndex: number, type: CourseStructureVocabulary) => {
+  const addItem = (lessonIndex: number, type: CourseStructureVocabulary) => {
     setUnits(prevUnits => {
       return prevUnits.map((unit, index) => {
-        if (index === unitIndex) {
+        if (index === lessonIndex) {
           return {
             ...unit,
             [type]: [...unit[type], { origin: '', target: '' }]
@@ -57,7 +56,7 @@ export default function CoursePage({ params }: CoursePageProps) {
     updateCourse({
       ...course,
       structure_vocabulary: JSON.stringify(units),
-    } as Schema["courses"]["type"]).then(() => {
+    } as Course).then(() => {
       router.push(`/courses`);
     }).finally(() => {
       setConfirmLoading(false);
@@ -66,18 +65,36 @@ export default function CoursePage({ params }: CoursePageProps) {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="flex-grow container mx-auto p-4">
-        <div className="pb-16">
-          {units.map((unit, unitIndex) => (
-            <LessonVocabularyStructure 
-              key={unit.unit} 
-              unit={unit} 
-              unitIndex={unitIndex} 
-              originLanguage={course?.origin || LanguagePairField.ORIGIN}
-              targetLanguage={course?.target || LanguagePairField.TARGET}
-              handleItemChange={handleItemChange} 
-              addItem={addItem} 
-            />
+      <main className="flex-grow container mx-auto">
+        <div className="pb-16 flex flex-col gap-8">
+          {units.map((unit, lessonIndex) => (
+            <div key={unit.unit}>
+              <h2 className="text-2xl font-bold mb-4 mt-4">Lesson {unit.unit}</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <LessonCard
+                  title="Vocabulary"
+                  items={unit.vocabulary}
+                  originLanguage={course?.origin || LanguagePairField.ORIGIN}
+                  targetLanguage={course?.target || LanguagePairField.TARGET}
+                  lessonIndex={lessonIndex}
+                  type={CourseStructureVocabulary.VOCABULARY}
+                  handleItemChange={handleItemChange}
+                  addItem={addItem}
+                  showEditButton={false}
+                />
+                <LessonCard
+                  title="Structures"
+                  items={unit.structure}
+                  originLanguage={course?.origin || LanguagePairField.ORIGIN}
+                  targetLanguage={course?.target || LanguagePairField.TARGET}
+                  lessonIndex={lessonIndex}
+                  type={CourseStructureVocabulary.STRUCTURE}
+                  handleItemChange={handleItemChange}
+                  addItem={addItem}
+                  showEditButton={false}
+                />
+              </div>
+            </div>
           ))}
         </div>
       </main>
