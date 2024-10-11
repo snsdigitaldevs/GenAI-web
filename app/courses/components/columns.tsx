@@ -38,7 +38,7 @@ export const columns: ColumnDef<Course>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Origin Language" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("origin")}</div>,
+    cell: ({ row }) => <div className="w-[60px]">{row.getValue("origin")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -47,7 +47,7 @@ export const columns: ColumnDef<Course>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Target Language" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("target")}</div>,
+    cell: ({ row }) => <div className="w-[60px]">{row.getValue("target")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -56,7 +56,7 @@ export const columns: ColumnDef<Course>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Description" />
     ),
-    cell: ({ row }) => <div className="w-[320px]">{row.getValue("description")}</div>,
+    cell: ({ row }) => <div className="w-[240px]">{row.getValue("description")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -65,12 +65,24 @@ export const columns: ColumnDef<Course>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Prompt" />
     ),
-    cell: ({ row }) => <div className="w-[320px]">{row.getValue("prompt")}</div>,
+    cell: ({ row }) => <div className="w-[240px]">{row.getValue("prompt")}</div>,
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "updatedAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Updated At" />
+    ),
+    cell: ({ row }) => <div className="w-[200px]">{row.getValue("updatedAt")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
     id: "actions",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Actions" />
+    ),
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ]
