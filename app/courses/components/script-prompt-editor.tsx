@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Script } from "@/lib/course/types";
 
-export default function ScriptPromptEditor() {
+export default function ScriptPromptEditor({ script }: { script: Script }) {
   return (
     <Card>
       <CardHeader>

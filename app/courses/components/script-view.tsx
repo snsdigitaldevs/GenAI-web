@@ -1,8 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MagicWandIcon } from "@radix-ui/react-icons";
+import { Script } from "@/lib/course/types";
 
-export default function ScriptView() {
+export default function ScriptView({ script }: { script: Script }) {
   return (
     <Card>
       <CardHeader>

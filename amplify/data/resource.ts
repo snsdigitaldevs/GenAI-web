@@ -30,7 +30,7 @@ const schema = a.schema({
   .authorization(allow => [allow.publicApiKey()]),
   scripts: a.model({
     courseId: a.string(),
-    lessonId: a.string(),
+    lessonId: a.integer(),
     prompt: a.string(),
     text: a.string(),
   })

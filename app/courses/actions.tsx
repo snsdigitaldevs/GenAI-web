@@ -2,7 +2,7 @@
 
 import { Course } from "@/app/courses/data/schema";
 import { model } from "@/lib/ai";
-import UnitSchema, { LanguageUnit } from "@/lib/course/types";
+import UnitSchema, { LanguageUnit, Script } from "@/lib/course/types";
 import { cookieBasedClient as client } from "@/lib/server";
 import { generateObject } from 'ai';
 
@@ -14,6 +14,16 @@ export async function getCourses() {
 export async function getCourse(courseId: string) {
   const { data, errors } = await client.models.courses.get({ id: courseId })
   return data as Course
+}
+
+export async function getScript(courseId: string, lessonId: number) {
+  const {data, errors} = await client.models.scripts.list({
+    filter: {
+      courseId: { eq: courseId },
+      lessonId: { eq: lessonId },
+    },
+  })
+  return data[0] as Script
 }
 
 export async function generateStructuresAndVocabulary(targetLanguage: string) {
