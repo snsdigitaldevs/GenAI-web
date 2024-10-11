@@ -14,6 +14,7 @@ import {
 import {useRouter} from "next/navigation"
 
 import {courseSchema} from "../data/schema"
+import { deleteCourse } from "../actions"
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -40,8 +41,7 @@ export function DataTableRowActions<TData>({
         <DropdownMenuItem asChild>
           <div onClick={() => route.push(`/courses/${course.id}/lessons`)}> Open Lessons</div>
         </DropdownMenuItem>
-        <DropdownMenuItem>Open Structures and Vocabulary</DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => deleteCourse(course.id)}>
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>

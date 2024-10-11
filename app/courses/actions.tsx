@@ -65,3 +65,7 @@ export async function generateStructuresAndVocabulary(targetLanguage: string) {
 
   return units;
 }
+
+export async function deleteCourse(courseId: string) {
+  await client.models.courses.delete({ id: courseId })
+}
