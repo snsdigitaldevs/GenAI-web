@@ -13,25 +13,39 @@ export default function LessonEditor({ course, lessonId }: { course: Course, les
   const currentLessonIndex = currentLessons.findIndex(lesson => lesson.unit === parseInt(lessonId));
   const [lessons, setLessons] = useState<LanguageUnit[]>(currentLessons);
 
-  const handleItemChange = (lessonIndex: number, type: CourseStructureVocabulary, itemIndex: number, field: LanguagePairField, value: string) => {
-    setLessons(prevUnits => {
-      const newUnits = [...prevUnits]
-      newUnits[lessonIndex][type][itemIndex][field] = value
-      return newUnits
+  const handleItemChange = (
+    lessonIndex: number,
+    type: CourseStructureVocabulary,
+    itemIndex: number,
+    field: LanguagePairField,
+    value: string
+  ) => {
+    setLessons(preLessons => {
+      const newLessons = [...preLessons]
+      newLessons[lessonIndex][type][itemIndex][field] = value
+      return newLessons
     })
   }
 
   const addItem = (lessonIndex: number, type: CourseStructureVocabulary) => {
-    setLessons(prevUnits => {
-      return prevUnits.map((unit, index) => {
+    setLessons(preLessons => {
+      return preLessons.map((lesson, index) => {
         if (index === lessonIndex) {
           return {
-            ...unit,
-            [type]: [...unit[type], { origin: '', target: '' }]
+            ...lesson,
+            [type]: [...lesson[type], { origin: '', target: '' }]
           };
         }
-        return unit;
+        return lesson;
       });
+    });
+  };
+
+  const deleteItem = (lessonIndex: number, type: CourseStructureVocabulary, itemIndex: number) => {
+    setLessons(preLessons => {
+      return preLessons.map((lesson, index) => 
+        index === lessonIndex ? { ...lesson, [type]: lesson[type].filter((_, i) => i !== itemIndex) } : lesson
+      );
     });
   };
 
@@ -55,10 +69,11 @@ export default function LessonEditor({ course, lessonId }: { course: Course, les
         targetLanguage={currentCourse?.target || LanguagePairField.TARGET}
         lessonIndex={currentLessonIndex}
         type={CourseStructureVocabulary.VOCABULARY}
+        showEditButton={true}
         handleItemChange={handleItemChange}
         addItem={addItem}
-        showEditButton={true}
         handleSummitItem={handleSummitItem}
+        deleteItem={deleteItem}
       />
       <LessonCard
         title="Structures"
@@ -67,10 +82,11 @@ export default function LessonEditor({ course, lessonId }: { course: Course, les
         targetLanguage={currentCourse?.target || LanguagePairField.TARGET}
         lessonIndex={currentLessonIndex}
         type={CourseStructureVocabulary.STRUCTURE}
+        showEditButton={true}
         handleItemChange={handleItemChange}
         addItem={addItem}
-        showEditButton={true}
         handleSummitItem={handleSummitItem}
+        deleteItem={deleteItem}
       />
     </div>
   )

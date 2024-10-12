@@ -28,25 +28,39 @@ export default function CoursePage({ params }: CoursePageProps) {
     })
   }, [params.id]);
 
-  const handleItemChange = (lessonIndex: number, type: CourseStructureVocabulary, itemIndex: number, field: LanguagePairField, value: string) => {
-    setUnits(prevUnits => {
-      const newUnits = [...prevUnits]
-      newUnits[lessonIndex][type][itemIndex][field] = value
-      return newUnits
+  const handleItemChange = (
+    lessonIndex: number,
+    type: CourseStructureVocabulary,
+    itemIndex: number,
+    field: LanguagePairField,
+    value: string
+  ) => {
+    setUnits(preLessons => {
+      const newLessons = [...preLessons]
+      newLessons[lessonIndex][type][itemIndex][field] = value
+      return newLessons
     })
   }
 
   const addItem = (lessonIndex: number, type: CourseStructureVocabulary) => {
-    setUnits(prevUnits => {
-      return prevUnits.map((unit, index) => {
+    setUnits(preLessons => {
+      return preLessons.map((lesson, index) => {
         if (index === lessonIndex) {
           return {
-            ...unit,
-            [type]: [...unit[type], { origin: '', target: '' }]
+            ...lesson,
+            [type]: [...lesson[type], { origin: '', target: '' }]
           };
         }
-        return unit;
+        return lesson;
       });
+    });
+  };
+
+  const deleteItem = (lessonIndex: number, type: CourseStructureVocabulary, itemIndex: number) => {
+    setUnits(preLessons => {
+      return preLessons.map((lesson, index) => 
+        index === lessonIndex ? { ...lesson, [type]: lesson[type].filter((_, i) => i !== itemIndex) } : lesson
+    );
     });
   };
 
@@ -77,9 +91,10 @@ export default function CoursePage({ params }: CoursePageProps) {
                   targetLanguage={course?.target || LanguagePairField.TARGET}
                   lessonIndex={lessonIndex}
                   type={CourseStructureVocabulary.VOCABULARY}
+                  showEditButton={false}
                   handleItemChange={handleItemChange}
                   addItem={addItem}
-                  showEditButton={false}
+                  deleteItem={deleteItem}
                 />
                 <LessonCard
                   title="Structures"
@@ -88,9 +103,10 @@ export default function CoursePage({ params }: CoursePageProps) {
                   targetLanguage={course?.target || LanguagePairField.TARGET}
                   lessonIndex={lessonIndex}
                   type={CourseStructureVocabulary.STRUCTURE}
+                  showEditButton={false}
                   handleItemChange={handleItemChange}
                   addItem={addItem}
-                  showEditButton={false}
+                  deleteItem={deleteItem}
                 />
               </div>
             </div>

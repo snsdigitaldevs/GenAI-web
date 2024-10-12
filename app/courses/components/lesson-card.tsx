@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { CourseStructureVocabulary, LanguagePairField } from '../type'
 import { useState } from "react";
+import { TrashIcon } from "@radix-ui/react-icons"
 
 interface LessonCardProps {
   title: string;
@@ -13,10 +14,17 @@ interface LessonCardProps {
   targetLanguage: string;
   lessonIndex: number;
   type: CourseStructureVocabulary;
-  handleItemChange: (lessonIndex: number, type: CourseStructureVocabulary, itemIndex: number, field: LanguagePairField, value: string) => void;
-  addItem: (lessonIndex: number, type: CourseStructureVocabulary) => void;
   showEditButton: boolean;
+  handleItemChange: (
+    lessonIndex: number,
+    type: CourseStructureVocabulary,
+    itemIndex: number,
+    field: LanguagePairField,
+    value: string
+  ) => void;
+  addItem: (lessonIndex: number, type: CourseStructureVocabulary) => void;
   handleSummitItem?: () => void;
+  deleteItem: (lessonIndex: number, type: CourseStructureVocabulary, itemIndex: number) => void;
 }
 
 export default function LessonCard({
@@ -26,10 +34,11 @@ export default function LessonCard({
   targetLanguage,
   lessonIndex,
   type,
+  showEditButton,
   handleItemChange,
   addItem,
-  showEditButton,
-  handleSummitItem
+  handleSummitItem,
+  deleteItem
 }: LessonCardProps) {
   const [editing, setEditing] = useState(!showEditButton);
 
@@ -52,15 +61,15 @@ export default function LessonCard({
           <CardTitle>{title}</CardTitle>
           {renderCardButtons()}
         </div>
-        <div className="grid grid-cols-2 gap-2 mt-2 bg-[#F8FAFC] text-[#94A3B8] h-[56px]">
+        <div className="grid grid-cols-2 mt-2 bg-[#F8FAFC] text-[#94A3B8] h-[56px]">
           <div className="font-semibold flex items-center pl-4">{originLanguage}</div>
-          <div className="font-semibold flex items-center pl-4">{targetLanguage}</div>
+          <div className="font-semibold flex items-center">{targetLanguage}</div>
         </div>
       </CardHeader>
       <CardContent className="flex-grow overflow-y-auto mb-4">
-        <div className="grid grid-cols-2 gap-y-2 gap-x-8 pl-2">
+        <div className="flex flex-col gap-2">
           {items.map((item, itemIndex) => (
-            <>
+            <div key={itemIndex} className="flex gap-2">
               <Input
                 disabled={!editing}
                 value={item.origin}
@@ -83,7 +92,16 @@ export default function LessonCard({
                   e.target.value
                 )}
               />
-            </>
+              <Button
+                variant="outline" 
+                size="icon" 
+                className="flex-shrink-0" 
+                disabled={!editing}
+                onClick={() => deleteItem(lessonIndex, type, itemIndex)}
+              >
+                <TrashIcon />
+              </Button>
+            </div>
           ))}
         </div>
       </CardContent>
