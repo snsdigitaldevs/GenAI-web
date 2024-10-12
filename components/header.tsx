@@ -47,12 +47,6 @@ export async function Header() {
         <Link href="/courses">
           <span className="hidden md:flex">Courses</span>
         </Link>
-
-        <DividerVerticalIcon />
-
-        <Link href="/documents">
-          <span className="hidden md:flex">Documents</span>
-        </Link>
       </section>
 
       <div className="flex items-center">

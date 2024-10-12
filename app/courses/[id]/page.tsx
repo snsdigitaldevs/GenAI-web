@@ -22,7 +22,6 @@ export default function CoursePage({ params }: CoursePageProps) {
 
   useEffect(() => {
     getCourseById(params.id).then((course) => {
-      console.log(course)
       setCourse(course);
       const sortedUnits = JSON.parse(course?.structure_vocabulary || "").sort((a: LanguageUnit, b: LanguageUnit) => a.unit - b.unit);
       setUnits(sortedUnits);
@@ -57,7 +56,7 @@ export default function CoursePage({ params }: CoursePageProps) {
       ...course,
       structure_vocabulary: JSON.stringify(units),
     } as Course).then(() => {
-      router.push(`/courses`);
+      router.push(`/courses/${params.id}/lessons`);
     }).finally(() => {
       setConfirmLoading(false);
     })
