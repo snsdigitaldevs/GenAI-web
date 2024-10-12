@@ -44,7 +44,6 @@ export function DataTableRowActions<TData>({
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => deleteCourse(course.id)}>
           Delete
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

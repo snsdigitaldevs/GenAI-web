@@ -1,3 +1,4 @@
+import sortBy from "lodash/sortBy"
 import { getCourses } from "./actions"
 import { columns } from "./components/columns"
 import { DataTable } from "./components/data-table"
@@ -5,6 +6,7 @@ import { NewCourse } from "./components/new-course"
 
 export default async function CoursePage() {
   const courses = await getCourses()
+  const sortedCourses = sortBy(courses, ['updatedAt']).reverse()
 
   return (
     <>
@@ -20,7 +22,7 @@ export default async function CoursePage() {
             <NewCourse />
           </div>
         </div>
-        <DataTable data={courses} columns={columns} />
+        <DataTable data={sortedCourses} columns={columns} />
       </div>
     </>
   )
