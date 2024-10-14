@@ -53,13 +53,13 @@ export async function generateStructuresAndVocabulary(targetLanguage: string) {
 
   console.log("allStructuresAndVocabulary", allStructuresAndVocabulary)
 
-  const svTextArray = allStructuresAndVocabulary.data.map((sv) => sv.text!)
+  const svTextArray = allStructuresAndVocabulary.data.map((sv: any) => sv.text!)
 
   if (!svTextArray) {
     throw new Error('Structures and Vocabulary not found')
   }
 
-  const unitPromises = svTextArray.map(async (sv) => {
+  const unitPromises = svTextArray.map(async (sv: any) => {
     const finalPrompt = prompt?.replace('{target_language}', targetLanguage).replace('{replace_S&V}', sv)
     console.log("finalPrompt", finalPrompt)
     const { object: data } = await generateObject({
