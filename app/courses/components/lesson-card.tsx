@@ -50,7 +50,7 @@ export default function LessonCard({
           <CardTitle>{title}</CardTitle>
           {showEditButton && <LessonCardEditButton editing={editing} setEditing={setEditing} handleSummitItem={handleSummitItem} />}
         </div>
-        <div className="grid grid-cols-2 mt-2 bg-[#F8FAFC] text-[#94A3B8] h-[56px]">
+        <div className="grid grid-cols-2 mt-2 bg-[#F8FAFC] text-[#94A3B8] h-[56px] border-b-[1px] border-[#E2E8F0]">
           <div className="font-semibold flex items-center pl-4">{originLanguage}</div>
           <div className="font-semibold flex items-center">{targetLanguage}</div>
         </div>
