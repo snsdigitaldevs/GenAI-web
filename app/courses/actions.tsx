@@ -5,6 +5,10 @@ import UnitSchema, { Course, LanguageUnit, Script } from "@/lib/course/types";
 import { cookieBasedClient as client } from "@/lib/server";
 import { generateObject, generateText } from 'ai';
 
+export async function createCourse(course: Course) {
+  return await client.models.courses.create(course)
+}
+
 export async function getCourses() {
   const { data, errors } = await client.models.courses.list()
   return data as Course[]

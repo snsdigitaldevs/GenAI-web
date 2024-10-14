@@ -22,12 +22,13 @@ import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { client } from "@/lib/client"
 import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { PlusCircledIcon } from '@radix-ui/react-icons'
-import { createScript, generateStructuresAndVocabulary } from "../actions"
+import { createScript, generateStructuresAndVocabulary, createCourse } from "../actions"
 import { useRouter } from "next/navigation"
+import { Course } from "@/lib/course/types"
+
 const FormSchema = z.object({
   originLanguage: z.string().min(2, {
     message: "Origin Language must be at least 2 characters.",
@@ -60,13 +61,13 @@ export function NewCourse() {
       const structureVocabulary = await generateStructuresAndVocabulary(data.targetLanguage)
       console.info(`Structure Vocabulary: ${structureVocabulary}`)
   
-      const course = await client.models.courses.create({
+      const course = await createCourse({
         origin: data.originLanguage,
         target: data.targetLanguage,
         prompt: data.prompt,
         description: data.description,
         structure_vocabulary: JSON.stringify(structureVocabulary),
-      })
+      } as unknown as Course)
       console.info(`Course submitted: ${JSON.stringify(course)}`)
 
       if (!course.data) {
