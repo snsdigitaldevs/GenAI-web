@@ -1,20 +1,19 @@
 "use client"
 
-import {DotsHorizontalIcon} from "@radix-ui/react-icons"
-import {Row} from "@tanstack/react-table"
+import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import { Row } from "@tanstack/react-table"
 
-import {Button} from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {useRouter} from "next/navigation"
+import { useRouter } from "next/navigation"
 
 import { deleteCourse } from "../actions"
-
-import {courseSchema} from "@/lib/course/types";
+import { courseSchema } from "@/lib/course/types";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>

@@ -79,8 +79,27 @@ export async function generateStructuresAndVocabulary(targetLanguage: string) {
   return units;
 }
 
-export async function deleteCourse(courseId: string) {
-  await client.models.courses.delete({ id: courseId })
+export async function deleteCourse(courseId: string): Promise<void> {
+  const { data: scripts, errors } = await client.models.scripts.list({
+    filter: {
+      courseId: { eq: courseId },
+    },
+  });
+  
+  if (errors) {
+    console.error(`Error fetching scripts: ${errors}`);
+    throw new Error(`Error fetching scripts: ${errors}`);
+  }
+
+  try {
+    await client.models.courses.delete({ id: courseId });
+    await Promise.all(scripts.map((script: Script) => 
+      client.models.scripts.delete({ id: script.id })
+    ));
+  } catch (error) {
+    console.error(`Error deleting course: ${error}`);
+    throw new Error(`Error deleting course: ${error}`);
+  }
 }
 
 export async function generateScript(lessonId: number, targetLanguage: string) {
