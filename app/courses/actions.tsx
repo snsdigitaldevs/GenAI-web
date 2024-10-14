@@ -122,7 +122,7 @@ export async function generateScript(lessonId: number, targetLanguage: string) {
 }
 
 export const updateScriptText = async (id: string, text: string) => {
-  console.log("updateScriptText", id)
+  console.log("updateScriptText", id, text)
   const { data, errors } = await client.models.scripts.update({ id: id, text: text })
   if (errors) {
     console.error(`updateScript error: ${errors}`)

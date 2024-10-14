@@ -1,5 +1,4 @@
 "use client";
-import { defaultEditorContent } from "@/lib/content";
 import {
   EditorCommand,
   EditorCommandEmpty,
@@ -30,8 +29,13 @@ const hljs = require('highlight.js');
 
 const extensions = [...defaultExtensions, slashCommand];
 
-const TailwindAdvancedEditor = () => {
-  const [initialContent, setInitialContent] = useState<null | JSONContent>(null);
+interface TailwindAdvancedEditorProps {
+  defaultEditorContent: null | JSONContent;
+  onSave?: (content: string) => Promise<void>;
+}
+
+const TailwindAdvancedEditor = ({ defaultEditorContent, onSave }: TailwindAdvancedEditorProps) => {
+  const [initialContent, setInitialContent] = useState<null | JSONContent>(defaultEditorContent);
   const [saveStatus, setSaveStatus] = useState("Saved");
   const [charsCount, setCharsCount] = useState();
 
@@ -57,14 +61,13 @@ const TailwindAdvancedEditor = () => {
     window.localStorage.setItem("html-content", highlightCodeblocks(editor.getHTML()));
     window.localStorage.setItem("novel-content", JSON.stringify(json));
     window.localStorage.setItem("markdown", editor.storage.markdown.getMarkdown());
+    window.localStorage.setItem("text", editor.getText());
+    if (onSave) {
+      await onSave(editor.getText());
+    }
+    
     setSaveStatus("Saved");
   }, 500);
-
-  useEffect(() => {
-    const content = window.localStorage.getItem("novel-content");
-    if (content) setInitialContent(JSON.parse(content));
-    else setInitialContent(defaultEditorContent);
-  }, []);
 
   if (!initialContent) return null;
 
