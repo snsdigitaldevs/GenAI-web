@@ -104,7 +104,7 @@ export async function generateScript(lessonId: number, targetLanguage: string) {
 
   const scriptText = scriptData[0].text!
 
-  const finalPrompt = prompt
+  const finalPrompt = prompt  
     .replace('{replace_S&V}', svJsonString)
     .replace('{replace_script}', scriptText)
     .replace('{target_language}', targetLanguage)

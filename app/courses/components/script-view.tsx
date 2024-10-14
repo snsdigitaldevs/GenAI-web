@@ -6,7 +6,7 @@ import { Course, Script } from "@/lib/course/types";
 import { MagicWandIcon } from "@radix-ui/react-icons";
 import { generateScript, updateScriptText } from "../actions";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Pencil, RefreshCw } from "lucide-react";
 
 export default function ScriptView({ script, course }: { script: Script, course: Course }) {
 
@@ -24,8 +24,18 @@ export default function ScriptView({ script, course }: { script: Script, course:
   return (
     scriptText ? (
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold">Script</CardTitle>
+          <div className="space-x-2">
+            <Button size="sm">
+              <Pencil className="mr-2 h-4 w-4" />
+              Edit
+            </Button>
+            <Button size="sm" onClick={() => generate()} disabled={loading}>
+              {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
+              Regenerate
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="whitespace-pre-wrap">{scriptText}</div>
