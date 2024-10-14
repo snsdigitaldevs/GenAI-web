@@ -85,7 +85,7 @@ export async function deleteCourse(courseId: string): Promise<void> {
       courseId: { eq: courseId },
     },
   });
-  
+
   if (errors) {
     console.error(`Error fetching scripts: ${errors}`);
     throw new Error(`Error fetching scripts: ${errors}`);
@@ -93,7 +93,7 @@ export async function deleteCourse(courseId: string): Promise<void> {
 
   try {
     await client.models.courses.delete({ id: courseId });
-    await Promise.all(scripts.map((script: Script) => 
+    await Promise.all(scripts.map((script) =>
       client.models.scripts.delete({ id: script.id })
     ));
   } catch (error) {
@@ -101,6 +101,7 @@ export async function deleteCourse(courseId: string): Promise<void> {
     throw new Error(`Error deleting course: ${error}`);
   }
 }
+
 
 export async function generateScript(lessonId: number, targetLanguage: string) {
   const prompt = await getPrompt('script')
@@ -123,7 +124,7 @@ export async function generateScript(lessonId: number, targetLanguage: string) {
 
   const scriptText = scriptData[0].text!
 
-  const finalPrompt = prompt  
+  const finalPrompt = prompt
     .replace('{replace_S&V}', svJsonString)
     .replace('{replace_script}', scriptText)
     .replace('{target_language}', targetLanguage)
