@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Course, Script } from "@/lib/course/types";
 import { MagicWandIcon } from "@radix-ui/react-icons";
-import { generateScript, updateScript } from "../actions";
+import { generateScript, updateScriptText } from "../actions";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
@@ -16,7 +16,7 @@ export default function ScriptView({ script, course }: { script: Script, course:
   const generate = async () => {
     setLoading(true)
     const text = await generateScript(script.lessonId, course.target)
-    await updateScript(script.id, text)
+    await updateScriptText(script.id, text)
     setScriptText(text)
     setLoading(false)
   }

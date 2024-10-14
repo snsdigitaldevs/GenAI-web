@@ -121,14 +121,24 @@ export async function generateScript(lessonId: number, targetLanguage: string) {
   return text
 }
 
-export const updateScript = async (id: string, text: string) => {
-  console.log("updateScript", id)
+export const updateScriptText = async (id: string, text: string) => {
+  console.log("updateScriptText", id)
   const { data, errors } = await client.models.scripts.update({ id: id, text: text })
   if (errors) {
     console.error(`updateScript error: ${errors}`)
     throw new Error(`updateScript error: ${errors}`)
   }
   return data!
+}
+
+export const updateScriptPrompt = async (id: string, prompt: string) => {
+  console.log("updateScriptPrompt", id)
+  const { data, errors } = await client.models.scripts.update({ id, prompt })
+  if (errors) {
+    console.error(`updateScript error: ${errors}`)
+    throw new Error(`updateScript error: ${errors}`)
+  }
+  return data! as Script
 }
 
 const getPrompt = async (type: string) => {

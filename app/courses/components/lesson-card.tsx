@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { CourseStructureVocabulary, LanguagePairField } from '../type'
 import { useState } from "react";
 import { TrashIcon } from "@radix-ui/react-icons"
+import LessonCardEditButton from "./lesson-card-edit-button"
 
 interface LessonCardProps {
   title: string;
@@ -42,24 +43,12 @@ export default function LessonCard({
 }: LessonCardProps) {
   const [editing, setEditing] = useState(!showEditButton);
 
-  const renderCardButtons = () => {
-    if (showEditButton) {
-      return editing ? 
-        <Button onClick={() => {
-          handleSummitItem?.();
-          setEditing(false);
-        }}>Confirm</Button> : 
-        <Button onClick={() => setEditing(true)}>Edit</Button>
-    }
-    return null;
-  }
-
   return (
     <Card className="h-[700px] flex flex-col">
       <CardHeader className="flex-shrink-0 gap-2">
         <div className="flex justify-between items-center">
           <CardTitle>{title}</CardTitle>
-          {renderCardButtons()}
+          {showEditButton && <LessonCardEditButton editing={editing} setEditing={setEditing} handleSummitItem={handleSummitItem} />}
         </div>
         <div className="grid grid-cols-2 mt-2 bg-[#F8FAFC] text-[#94A3B8] h-[56px]">
           <div className="font-semibold flex items-center pl-4">{originLanguage}</div>
