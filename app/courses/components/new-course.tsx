@@ -75,9 +75,9 @@ export function NewCourse() {
       }
 
       await createScript(course.data.id, structureVocabulary)
+      router.push(`/courses/${course.data?.id}`);
       setLoading(false)
       setIsDialogOpen(false)
-      router.push(`/courses/${course.data?.id}`);
     } catch (error) {
       console.error(`Error submitting task: ${error}`)
       setLoading(false)

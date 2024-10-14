@@ -71,6 +71,8 @@ export default function CoursePage({ params }: CoursePageProps) {
       structure_vocabulary: JSON.stringify(units),
     } as Course).then(() => {
       router.push(`/courses/${params.id}/lessons`);
+    }).catch((e) => {
+      console.error(e)
     }).finally(() => {
       setConfirmLoading(false);
     })
