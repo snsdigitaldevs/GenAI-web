@@ -42,7 +42,11 @@ export async function createScript(courseId: string, lessons: LanguageUnit[]) {
   })
 }
 
-export async function generateStructuresAndVocabulary(targetLanguage: string) {
+export async function generateStructuresAndVocabulary(
+  targetLanguage: string,
+  originLanguage: string,
+  customPrompt: string | undefined
+) {
   const prompt = await getPrompt('S&V')
 
   const allStructuresAndVocabulary = await client.models.resources.list({
@@ -60,7 +64,12 @@ export async function generateStructuresAndVocabulary(targetLanguage: string) {
   }
 
   const unitPromises = svTextArray.map(async (sv: any) => {
-    const finalPrompt = prompt?.replace('{target_language}', targetLanguage).replace('{replace_S&V}', sv)
+    const finalPrompt = prompt
+      .replace('{target_language}', targetLanguage)
+      .replace('{origin_language}', originLanguage)
+      .replace('{replace_S&V}', sv)
+      .replace('{custom_prompt}', customPrompt ?? '')
+
     console.log("finalPrompt", finalPrompt)
     const { object: data } = await generateObject({
       model: model,

@@ -75,7 +75,7 @@ export function NewCourse() {
 
     try {
       setIsDialogOpen(false)
-      const structureVocabulary = await generateStructuresAndVocabulary(data.targetLanguage)
+      const structureVocabulary = await generateStructuresAndVocabulary(data.targetLanguage, data.originLanguage, data.prompt)
       console.info(`Structure Vocabulary: ${structureVocabulary}`)
 
       const course = await createCourse({
