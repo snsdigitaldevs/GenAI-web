@@ -37,10 +37,10 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem className="cursor-pointer" asChild>
           <div onClick={() => route.push(`/courses/${course.id}/lessons`)}> Open Lessons</div>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => deleteCourse(course.id)}>
+        <DropdownMenuItem className="cursor-pointer" onClick={() => deleteCourse(course.id)}>
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>
