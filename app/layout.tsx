@@ -28,7 +28,7 @@ export default function RootLayout({ children }: Readonly<{
     >
       <div className="flex flex-col min-h-screen">
         <Header />
-        <main className="flex flex-col flex-1 bg-muted/50">{children}</main>
+        <main className="flex flex-col flex-1 p-6">{children}</main>
       </div>
     </Providers>
     </body>
