@@ -13,7 +13,7 @@ import {
 import { useRouter } from "next/navigation"
 
 import { deleteCourse } from "../actions"
-import { courseSchema } from "@/lib/course/types";
+import { courseSchema} from "@/lib/course/types";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
