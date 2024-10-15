@@ -49,15 +49,19 @@ export default function LessonEditor({ course, lessonId }: { course: Course, les
     });
   };
 
-  const handleSummitItem = () => {
+  const handleSummitItem = async () => {
     const updatedCourse: Course = {
       ...currentCourse,
       structure_vocabulary: JSON.stringify(lessons)
     }
-    updateCourse(updatedCourse).then((course) => {
+    return updateCourse(updatedCourse).then((course) => {
       setCurrentCourse(course as Course);
       setLessons(JSON.parse(course.structure_vocabulary || "[]") as LanguageUnit[]);
     })
+  }
+
+  const handleCancelItem = () => {
+    setLessons(currentLessons);
   }
 
   return (
@@ -72,8 +76,9 @@ export default function LessonEditor({ course, lessonId }: { course: Course, les
         showEditButton={true}
         handleItemChange={handleItemChange}
         addItem={addItem}
-        handleSummitItem={handleSummitItem}
         deleteItem={deleteItem}
+        handleSummitItem={handleSummitItem}
+        handleCancelItem={handleCancelItem}
       />
       <LessonCard
         title="Structures"
@@ -85,8 +90,9 @@ export default function LessonEditor({ course, lessonId }: { course: Course, les
         showEditButton={true}
         handleItemChange={handleItemChange}
         addItem={addItem}
-        handleSummitItem={handleSummitItem}
         deleteItem={deleteItem}
+        handleSummitItem={handleSummitItem}
+        handleCancelItem={handleCancelItem}
       />
     </div>
   )

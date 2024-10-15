@@ -24,8 +24,9 @@ interface LessonCardProps {
     value: string
   ) => void;
   addItem: (lessonIndex: number, type: CourseStructureVocabulary) => void;
-  handleSummitItem?: () => void;
   deleteItem: (lessonIndex: number, type: CourseStructureVocabulary, itemIndex: number) => void;
+  handleSummitItem?: () => Promise<void>;
+  handleCancelItem?: () => void;
 }
 
 export default function LessonCard({
@@ -39,16 +40,37 @@ export default function LessonCard({
   handleItemChange,
   addItem,
   handleSummitItem,
-  deleteItem
+  deleteItem,
+  handleCancelItem
 }: LessonCardProps) {
   const [editing, setEditing] = useState(!showEditButton);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   return (
     <Card className="h-[700px] flex flex-col">
       <CardHeader className="flex-shrink-0 gap-2">
         <div className="flex justify-between items-center">
           <CardTitle>{title}</CardTitle>
-          {showEditButton && <LessonCardEditButton editing={editing} setEditing={setEditing} handleSummitItem={handleSummitItem} />}
+          {showEditButton && <LessonCardEditButton 
+            editing={editing} 
+            setEditing={setEditing} 
+            confirmLoading={confirmLoading}
+            handleSummitItem={() => {
+              if (handleSummitItem) {
+                setConfirmLoading(true);
+                handleSummitItem().finally(() => {
+                  setConfirmLoading(false);
+                  setEditing(false);
+                });
+              }
+            }} 
+            handleCancelItem={() => {
+              if (handleCancelItem) {
+                handleCancelItem();
+                setEditing(false);
+              }
+            }}
+          />}
         </div>
         <div className="grid grid-cols-2 mt-2 bg-[#F8FAFC] text-[#94A3B8] h-[56px] border-b-[1px] border-[#E2E8F0]">
           <div className="font-semibold flex items-center pl-4">{originLanguage}</div>
@@ -60,7 +82,7 @@ export default function LessonCard({
           {items.map((item, itemIndex) => (
             <div key={itemIndex} className="flex gap-2">
               <Input
-                disabled={!editing}
+                disabled={!editing || confirmLoading}
                 value={item.origin}
                 onChange={(e) => handleItemChange(
                   lessonIndex,
@@ -71,7 +93,7 @@ export default function LessonCard({
                 )}
               />
               <Input
-                disabled={!editing}
+                disabled={!editing || confirmLoading}
                 value={item.target}
                 onChange={(e) => handleItemChange(
                   lessonIndex,
@@ -85,7 +107,7 @@ export default function LessonCard({
                 variant="outline" 
                 size="icon" 
                 className="flex-shrink-0" 
-                disabled={!editing}
+                disabled={!editing || confirmLoading}
                 onClick={() => deleteItem(lessonIndex, type, itemIndex)}
               >
                 <TrashIcon />
@@ -95,7 +117,7 @@ export default function LessonCard({
         </div>
       </CardContent>
       {editing && <div className="py-4 px-6 flex-shrink-0 border-t flex justify-center">
-        <Button variant="outline" className="w-full" onClick={() => addItem(lessonIndex, type)}>
+        <Button disabled={confirmLoading} variant="outline" className="w-full" onClick={() => addItem(lessonIndex, type)}>
           <PlusCircledIcon className="size-4 mr-2" />
           Add New
         </Button>
