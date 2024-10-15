@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Pencil1Icon } from "@radix-ui/react-icons";
 
 interface LessonCardEditButtonProps {
   editing: boolean;
@@ -14,5 +15,9 @@ export default function LessonCardEditButton({ editing, setEditing, handleSummit
         setEditing(false);
       }}>
       Confirm
-    </Button> : <Button onClick={() => setEditing(true)}>Edit</Button>
+    </Button> : 
+    <Button onClick={() => setEditing(true)}>
+      <Pencil1Icon className="size-4 mr-2" />
+      Edit
+    </Button>
 }

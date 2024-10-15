@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { CourseStructureVocabulary, LanguagePairField } from '../type'
 import { useState } from "react";
-import { TrashIcon } from "@radix-ui/react-icons"
+import { PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons"
 import LessonCardEditButton from "./lesson-card-edit-button"
 
 interface LessonCardProps {
@@ -94,8 +94,9 @@ export default function LessonCard({
           ))}
         </div>
       </CardContent>
-      {editing && <div className="p-6 flex-shrink-0 border-t">
+      {editing && <div className="py-4 px-6 flex-shrink-0 border-t flex justify-center">
         <Button variant="outline" className="w-full" onClick={() => addItem(lessonIndex, type)}>
+          <PlusCircledIcon className="size-4 mr-2" />
           Add New
         </Button>
       </div>}
