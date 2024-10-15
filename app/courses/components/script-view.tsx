@@ -18,7 +18,7 @@ export default function ScriptView({ script, course }: { script: Script, course:
 
   const generate = async () => {
     setLoading(true)
-    const text = await generateScript(script.lessonId, course.target)
+    const text = await generateScript(script.lessonId, course)
     await updateScriptText(script.id, text)
     setScriptText(text)
     setLoading(false)

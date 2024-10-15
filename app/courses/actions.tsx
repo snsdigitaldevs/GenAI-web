@@ -49,19 +49,7 @@ export async function generateStructuresAndVocabulary(
 ) {
   const prompt = await getPrompt('S&V')
 
-  const allStructuresAndVocabulary = await client.models.resources.list({
-    filter: {
-      type: { eq: 'S&V' },
-    },
-  })
-
-  console.log("allStructuresAndVocabulary", allStructuresAndVocabulary)
-
-  const svTextArray = allStructuresAndVocabulary.data.map((sv: any) => sv.text!)
-
-  if (!svTextArray) {
-    throw new Error('Structures and Vocabulary not found')
-  }
+  const svTextArray = await getStructuresAndVocabularyJsonStringArray()
 
   const unitPromises = svTextArray.map(async (sv: any) => {
     const finalPrompt = prompt
@@ -112,31 +100,29 @@ export async function deleteCourse(courseId: string): Promise<void> {
 }
 
 
-export async function generateScript(lessonId: number, targetLanguage: string) {
+export async function generateScript(
+  lessonId: number,
+  course: Course
+) {
   const prompt = await getPrompt('script')
 
-  const { data, errors } = await client.models.resources.list({
-    filter: {
-      type: { eq: 'S&V' },
-      index: { eq: lessonId },
-    },
-  })
+  const structuresAndVocabularyJsonString = await getStructuresAndVocabularyByLessonId(lessonId)
 
-  const svJsonString = data[0].text!
+  const scriptText = await getScriptByLessonId(lessonId)
 
-  const { data: scriptData, errors: scriptErrors } = await client.models.resources.list({
-    filter: {
-      type: { eq: 'script' },
-      index: { eq: lessonId },
-    },
-  })
+  const newStructuresAndVocabulary = JSON.parse(course.structure_vocabulary!) as LanguageUnit[]
 
-  const scriptText = scriptData[0].text!
+  const replaceStructuresAndVocabulary = newStructuresAndVocabulary
+    .filter((unit) => unit.unit === lessonId)
+    .map((unit) => JSON.stringify(unit))[0]
 
   const finalPrompt = prompt
-    .replace('{replace_S&V}', svJsonString)
-    .replace('{replace_script}', scriptText)
-    .replace('{target_language}', targetLanguage)
+    .replace('{replace_origin_S&V}', structuresAndVocabularyJsonString)
+    .replace('{replace_origin_script}', scriptText)
+    .replace('{replace_new_S&V}', replaceStructuresAndVocabulary)
+    .replace('{target_language}', course.target)
+    .replace('{origin_language}', course.origin)
+    .replace('{custom_prompt}', course.prompt ?? '')
 
   console.log("finalPrompt", finalPrompt)
 
@@ -171,16 +157,76 @@ export const updateScriptPrompt = async (id: string, prompt: string) => {
 }
 
 const getPrompt = async (type: string) => {
-  const prompts = await client.models.prompts.list({
+  const { data: prompts, errors } = await client.models.prompts.list({
     filter: {
       type: { eq: type },
     },
   })
 
-  const prompt = prompts.data[0].text
+  if (errors) {
+    console.error(`getPrompt error: ${errors}`)
+    throw new Error(`getPrompt error: ${errors}`)
+  }
+
+  const prompt = prompts[0].text
 
   if (!prompt) {
     throw new Error('Prompt not found')
   }
   return prompt
+}
+
+const getStructuresAndVocabularyByLessonId = async (lessonId: number) => {
+  const { data, errors } = await client.models.resources.list({
+    filter: {
+      type: { eq: 'S&V' },
+      index: { eq: lessonId },
+    },
+  })
+
+  if (errors) {
+    console.error(`getStructuresAndVocabularyByLessonId error: ${errors}`)
+    throw new Error(`getStructuresAndVocabularyByLessonId error: ${errors}`)
+  }
+
+  return data[0].text!
+}
+
+const getScriptByLessonId = async (lessonId: number) => {
+  const { data, errors } = await client.models.resources.list({
+    filter: {
+      type: { eq: 'script' },
+      index: { eq: lessonId },
+    },
+  })
+
+  if (errors) {
+    console.error(`getScriptByLessonId error: ${errors}`)
+    throw new Error(`getScriptByLessonId error: ${errors}`)
+  }
+
+  return data[0].text!
+}
+
+const getStructuresAndVocabularyJsonStringArray = async () => {
+  const { data, errors } = await client.models.resources.list({
+    filter: {
+      type: { eq: 'S&V' },
+    },
+  })
+
+  if (errors) {
+    console.error(`getStructuresAndVocabularyJsonStringArray error: ${errors}`)
+    throw new Error(`getStructuresAndVocabularyJsonStringArray error: ${errors}`)
+  }
+
+  console.log("allStructuresAndVocabulary", data)
+
+  const svTextArray = data.map((sv) => sv.text!)
+
+  if (!svTextArray) {
+    throw new Error('Structures and Vocabulary not found')
+  }
+
+  return svTextArray
 }
