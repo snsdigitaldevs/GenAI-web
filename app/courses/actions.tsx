@@ -34,12 +34,12 @@ export async function getScript(courseId: string, lessonId: number): Promise<Scr
 }
 
 export async function createScript(courseId: string, lessons: LanguageUnit[]) {
-  lessons.forEach(async (lesson) => {
+  for (const lesson of lessons) {
     await client.models.scripts.create({
       courseId: courseId,
       lessonId: lesson.unit
     })
-  })
+  }
 }
 
 export async function generateStructuresAndVocabulary(
