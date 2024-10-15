@@ -10,13 +10,13 @@ export async function createCourse(course: Course) {
 }
 
 export async function getCourses() {
-  const { data, errors } = await client.models.courses.list()
-  return data as Course[]
+  const { data, errors } = await client.models.courses.list({})
+  return data as unknown as Course[]
 }
 
 export async function getCourse(courseId: string) {
   const { data, errors } = await client.models.courses.get({ id: courseId })
-  return data as Course
+  return data as unknown as Course
 }
 
 export async function getScript(courseId: string, lessonId: number): Promise<Script> {
@@ -158,7 +158,7 @@ export const updateScriptPrompt = async (id: string, prompt: string) => {
     console.error(`updateScript error: ${errors}`)
     throw new Error(`updateScript error: ${errors}`)
   }
-  return data! as Script
+  return data! as unknown as Script
 }
 
 const getPrompt = async (type: string) => {

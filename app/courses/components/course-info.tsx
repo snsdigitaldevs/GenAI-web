@@ -1,13 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-
-
 import {Course} from "@/lib/course/types";
+import TitleText from "./title-text";
 
 export default function CourseInfo({ course }: { course: Course }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Course Information</CardTitle>
+        <CardTitle>
+          <TitleText title="Course Information" />
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <dl className="space-y-2">
