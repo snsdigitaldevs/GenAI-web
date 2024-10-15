@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { CourseStructureVocabulary, LanguagePairField } from '../type'
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons"
 import LessonCardEditButton from "./lesson-card-edit-button"
 
@@ -39,12 +39,32 @@ export default function LessonCard({
   showEditButton,
   handleItemChange,
   addItem,
-  handleSummitItem,
   deleteItem,
-  handleCancelItem
+  handleCancelItem,
+  handleSummitItem,
 }: LessonCardProps) {
   const [editing, setEditing] = useState(!showEditButton);
   const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const lastItemRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (shouldScrollToBottom && lastItemRef.current) {
+      lastItemRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }, [items, shouldScrollToBottom]);
+
+  const handleAddItem = () => {
+    setShouldScrollToBottom(true);
+    addItem(lessonIndex, type);
+  };
+
+  const handleEditItem = (itemIndex: number) => {
+    setShouldScrollToBottom(false);
+    deleteItem(lessonIndex, type, itemIndex)
+  }
 
   return (
     <Card className="h-[700px] flex flex-col">
@@ -77,10 +97,10 @@ export default function LessonCard({
           <div className="font-semibold flex items-center">{targetLanguage}</div>
         </div>
       </CardHeader>
-      <CardContent className="flex-grow overflow-y-auto mb-4">
+      <CardContent ref={contentRef} className="flex-grow overflow-y-auto mb-4">
         <div className="flex flex-col gap-2">
           {items.map((item, itemIndex) => (
-            <div key={itemIndex} className="flex gap-2">
+            <div key={itemIndex} className="flex gap-2" ref={itemIndex === items.length - 1 ? lastItemRef : null}>
               <Input
                 disabled={!editing || confirmLoading}
                 value={item.origin}
@@ -108,7 +128,7 @@ export default function LessonCard({
                 size="icon" 
                 className="flex-shrink-0" 
                 disabled={!editing || confirmLoading}
-                onClick={() => deleteItem(lessonIndex, type, itemIndex)}
+                onClick={() => handleEditItem(itemIndex)}
               >
                 <TrashIcon />
               </Button>
@@ -117,7 +137,7 @@ export default function LessonCard({
         </div>
       </CardContent>
       {editing && <div className="py-4 px-6 flex-shrink-0 border-t flex justify-center">
-        <Button disabled={confirmLoading} variant="outline" className="w-full" onClick={() => addItem(lessonIndex, type)}>
+        <Button disabled={confirmLoading} variant="outline" className="w-full" onClick={handleAddItem}>
           <PlusCircledIcon className="size-4 mr-2" />
           Add New
         </Button>
