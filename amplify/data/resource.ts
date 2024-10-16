@@ -52,8 +52,8 @@ export const data = defineData({
     apiKeyAuthorizationMode: { expiresInDays: 30 },
     oidcAuthorizationMode: {
       oidcProviderName: 'auth0-dev',
-      oidcIssuerUrl: process.env.AUTH_AUTH0_ISSUER || '',
-      clientId: process.env.AUTH_AUTH0_ID || '',
+      oidcIssuerUrl: 'https://mg2-ss-dev.auth0.com',
+      clientId: 'qqFHt2X8ejE4IvTtXYjDQxHsLZvSkDKA',
       tokenExpiryFromAuthInSeconds: 0,
       tokenExpireFromIssueInSeconds: 0,
     },
