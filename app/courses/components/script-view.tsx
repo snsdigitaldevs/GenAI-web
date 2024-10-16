@@ -74,8 +74,8 @@ export default function ScriptView({ script, course }: { script: Script, course:
             </Button>
           </div>
         </CardHeader>
-        <CardContent>
-        {isEditing ? (
+        <CardContent className="max-h-[800px] overflow-y-auto">
+          {isEditing ? (
             <TailwindAdvancedEditor defaultEditorContent={convertToEditorContent(scriptText)} onSave={saveContent} />
           ) : (
             <div className="whitespace-pre-wrap">{scriptText}</div>
