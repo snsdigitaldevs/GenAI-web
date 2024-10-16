@@ -1,5 +1,7 @@
 import { a, defineData, type ClientSchema } from '@aws-amplify/backend';
 
+const oidc_authz = (allow: any) => [allow.groups(['GenAI-ADMIN'], 'oidc').withClaimIn('https://pimslure.com/roles')]
+
 const schema = a.schema({
   courses: a.model({
     origin: a.string(),
@@ -8,7 +10,7 @@ const schema = a.schema({
     description: a.string(),
     structure_vocabulary: a.string(),
   })
-    .authorization(allow => [allow.publicApiKey()]),
+    .authorization(oidc_authz),
   chats: a.model({
     chatId: a.string(),
     email: a.string(),
@@ -16,25 +18,25 @@ const schema = a.schema({
     title: a.string(),
     path: a.string(),
   })
-    .authorization(allow => [allow.publicApiKey()]),
+    .authorization(oidc_authz),
   resources: a.model({
     type: a.string(),
     index: a.integer(),
     text: a.string(),
   })
-    .authorization(allow => [allow.publicApiKey()]),
+    .authorization(oidc_authz),
   prompts: a.model({
     type: a.string(),
     text: a.string(),
   })
-    .authorization(allow => [allow.publicApiKey(), allow.groups(['GenAI-ADMIN'], 'oidc').withClaimIn('https://pimslure.com/roles')]),
+    .authorization(oidc_authz),
   scripts: a.model({
     courseId: a.string(),
     lessonId: a.integer(),
     prompt: a.string(),
     text: a.string(),
   })
-    .authorization(allow => [allow.publicApiKey()]),
+    .authorization(oidc_authz),
 });
 
 // Used for code completion / highlighting when making requests from frontend
@@ -44,8 +46,7 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: 'apiKey',
-    apiKeyAuthorizationMode: { expiresInDays: 30 },
+    defaultAuthorizationMode: 'oidc',
     oidcAuthorizationMode: {
       oidcProviderName: 'auth0-dev',
       oidcIssuerUrl: 'https://mg2-ss-dev.auth0.com',
