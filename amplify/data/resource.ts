@@ -27,11 +27,7 @@ const schema = a.schema({
     type: a.string(),
     text: a.string(),
   })
-    .authorization((allow) => [
-      allow
-        .groups(['GenAI-ADMIN"'], 'oidc')
-        .withClaimIn('https://pimslure.com/roles'),
-    ]),
+    .authorization(allow => [allow.publicApiKey()]),
   scripts: a.model({
     courseId: a.string(),
     lessonId: a.integer(),
@@ -49,13 +45,6 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: 'apiKey',
-    apiKeyAuthorizationMode: { expiresInDays: 30 },
-    oidcAuthorizationMode: {
-      oidcProviderName: 'auth0-dev',
-      oidcIssuerUrl: 'https://mg2-ss-dev.auth0.com',
-      clientId: 'qqFHt2X8ejE4IvTtXYjDQxHsLZvSkDKA',
-      tokenExpiryFromAuthInSeconds: 0,
-      tokenExpireFromIssueInSeconds: 0,
-    },
+    apiKeyAuthorizationMode: { expiresInDays: 30 }
   }
 });
