@@ -34,12 +34,37 @@ export function DataTableRowActions<TData>({
   const route = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [deleteCourseLoading, setDeleteCourseLoading] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
 
   const handleDeleteCourse = async () => {
     setDeleteCourseLoading(true)
     await deleteCourse(course.id)
     setDeleteCourseLoading(false)
     setIsDialogOpen(false)
+  }
+
+  const handleDownloadFlashCard = async () => {
+    setIsDownloading(true)
+    try {
+      const response = await fetch(`/api/flash-card?courseId=${course.id}`, {
+        method: 'GET',
+      })
+      if (!response.ok) throw new Error('Download failed')
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = url
+      a.download = `flashcard_${course.id}.xlsx`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Error downloading flash card:', error)
+    } finally {
+      setIsDownloading(false)
+    }
   }
 
   return (
@@ -54,11 +79,18 @@ export function DataTableRowActions<TData>({
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuContent align="end" className="w-[180px]">
           <DropdownMenuItem className="cursor-pointer" asChild>
             <div onClick={() => route.push(`/courses/${course.id}/lessons`)}>
               Open Lessons
             </div>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={handleDownloadFlashCard}
+            disabled={isDownloading}
+          >
+            {isDownloading ? 'Downloading...' : 'Download Flash Card'}
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer" onClick={() => setIsDialogOpen(true)}>
             Delete
