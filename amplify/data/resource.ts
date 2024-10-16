@@ -27,7 +27,7 @@ const schema = a.schema({
     type: a.string(),
     text: a.string(),
   })
-    .authorization(allow => [allow.groups(['GenAI-ADMIN'], 'oidc').withClaimIn('https://pimslure.com/roles')]),
+    .authorization(allow => [allow.publicApiKey(), allow.groups(['GenAI-ADMIN'], 'oidc').withClaimIn('https://pimslure.com/roles')]),
   scripts: a.model({
     courseId: a.string(),
     lessonId: a.integer(),
