@@ -45,6 +45,13 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: 'apiKey',
-    apiKeyAuthorizationMode: { expiresInDays: 30 }
+    apiKeyAuthorizationMode: { expiresInDays: 30 },
+    oidcAuthorizationMode: {
+      oidcProviderName: 'auth0-dev',
+      oidcIssuerUrl: 'https://mg2-ss-dev.auth0.com',
+      clientId: 'qqFHt2X8ejE4IvTtXYjDQxHsLZvSkDKA',
+      tokenExpiryFromAuthInSeconds: 0,
+      tokenExpireFromIssueInSeconds: 0,
+    },
   }
 });
