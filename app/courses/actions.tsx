@@ -4,7 +4,6 @@ import { model } from "@/lib/ai";
 import UnitSchema, { Course, LanguageUnit, Script } from "@/lib/course/types";
 import { cookieBasedClient as client, getOIDCClient } from "@/lib/server";
 import { generateObject, generateText } from 'ai';
-import { get } from "lodash";
 
 export async function createCourse(course: Course) {
   return await client.models.courses.create(course)
