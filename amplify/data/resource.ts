@@ -2,13 +2,13 @@ import { a, defineData, type ClientSchema } from '@aws-amplify/backend';
 
 const schema = a.schema({
   courses: a.model({
-      origin: a.string(),
-      target: a.string(),
-      prompt: a.string(),
-      description: a.string(),
-      structure_vocabulary: a.string(),
+    origin: a.string(),
+    target: a.string(),
+    prompt: a.string(),
+    description: a.string(),
+    structure_vocabulary: a.string(),
   })
-  .authorization(allow => [allow.publicApiKey()]),
+    .authorization(allow => [allow.publicApiKey()]),
   chats: a.model({
     chatId: a.string(),
     email: a.string(),
@@ -16,25 +16,29 @@ const schema = a.schema({
     title: a.string(),
     path: a.string(),
   })
-  .authorization(allow => [allow.publicApiKey()]),
+    .authorization(allow => [allow.publicApiKey()]),
   resources: a.model({
     type: a.string(),
     index: a.integer(),
     text: a.string(),
   })
-  .authorization(allow => [allow.publicApiKey()]),
+    .authorization(allow => [allow.publicApiKey()]),
   prompts: a.model({
     type: a.string(),
     text: a.string(),
   })
-  .authorization(allow => [allow.publicApiKey()]),
+    .authorization((allow) => [
+      allow
+        .groups(['GenAI-ADMIN"'], 'oidc')
+        .withClaimIn('https://pimslure.com/roles'),
+    ]),
   scripts: a.model({
     courseId: a.string(),
     lessonId: a.integer(),
     prompt: a.string(),
     text: a.string(),
   })
-  .authorization(allow => [allow.publicApiKey()]),
+    .authorization(allow => [allow.publicApiKey()]),
 });
 
 // Used for code completion / highlighting when making requests from frontend
@@ -45,6 +49,13 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: 'apiKey',
-    apiKeyAuthorizationMode: { expiresInDays: 30 }
+    apiKeyAuthorizationMode: { expiresInDays: 30 },
+    oidcAuthorizationMode: {
+      oidcProviderName: 'auth0-dev',
+      oidcIssuerUrl: process.env.AUTH_AUTH0_ISSUER || '',
+      clientId: process.env.AUTH_AUTH0_ID || '',
+      tokenExpiryFromAuthInSeconds: 0,
+      tokenExpireFromIssueInSeconds: 0,
+    },
   }
 });

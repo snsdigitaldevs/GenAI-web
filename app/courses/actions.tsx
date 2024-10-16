@@ -2,8 +2,9 @@
 
 import { model } from "@/lib/ai";
 import UnitSchema, { Course, LanguageUnit, Script } from "@/lib/course/types";
-import { cookieBasedClient as client } from "@/lib/server";
+import { cookieBasedClient as client, getOIDCClient } from "@/lib/server";
 import { generateObject, generateText } from 'ai';
+import { get } from "lodash";
 
 export async function createCourse(course: Course) {
   return await client.models.courses.create(course)
@@ -157,11 +158,12 @@ export const updateScriptPrompt = async (id: string, prompt: string) => {
 }
 
 const getPrompt = async (type: string) => {
-  const { data: prompts, errors } = await client.models.prompts.list({
+  const oidcClient = await getOIDCClient();
+  const { data: prompts, errors } = await oidcClient.models.prompts.list({
     filter: {
       type: { eq: type },
     },
-  })
+  });
 
   if (errors) {
     console.error(`getPrompt error: ${errors}`)
