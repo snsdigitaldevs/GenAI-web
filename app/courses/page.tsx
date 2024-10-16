@@ -6,6 +6,8 @@ import { NewCourse } from "./components/new-course"
 import TitleText from "./components/title-text"
 import { Card, CardTitle, CardHeader, CardDescription, CardContent } from "@/components/ui/card"
 
+export const dynamic = "force-dynamic";
+
 export default async function CoursePage() {
   const courses = await getCourses()
   const sortedCourses = sortBy(courses, ['updatedAt']).reverse()
