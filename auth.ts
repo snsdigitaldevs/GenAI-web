@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth, { Session, type DefaultSession } from "next-auth"
 import { JWT } from "next-auth/jwt"
 import Auth0 from "next-auth/providers/auth0"
 import { ROLE_HAVE_PERMISSION, ROLES_CLAIM } from "./lib/constant";
@@ -6,6 +6,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 interface Auth0ProfileRoles {
   roles: string[];
+}
+ 
+declare module "next-auth" {
+  interface Session {
+    user: {
+    } & DefaultSession["user"]
+    accessToken: string;
+  }
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
