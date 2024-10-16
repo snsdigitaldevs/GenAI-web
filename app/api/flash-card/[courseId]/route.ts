@@ -3,9 +3,12 @@ import { cookieBasedClient as client } from '@/lib/server';
 import { NextRequest, NextResponse } from 'next/server';
 import * as XLSX from 'xlsx';
 
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { courseId: string } }
+) {
   try {
-    const courseId = req.nextUrl.searchParams.get('courseId');
+    const courseId = params.courseId;
     if (!courseId) {
       return NextResponse.json({ error: 'Course ID is required' }, { status: 400 });
     }
