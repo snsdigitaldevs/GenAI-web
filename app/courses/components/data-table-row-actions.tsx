@@ -46,7 +46,7 @@ export function DataTableRowActions<TData>({
   const handleDownloadFlashCard = async () => {
     setIsDownloading(true)
     try {
-      const response = await fetch(`/api/flash-card?courseId=${course.id}`, {
+      const response = await fetch(`/api/flash-card/${course.id}`, {
         method: 'GET',
       })
       if (!response.ok) throw new Error('Download failed')
