@@ -18,7 +18,7 @@ import { Chat, Message } from '@/lib/types'
 import { auth } from '@/auth'
 import { BotCard, BotMessage, BotSkeleton, SpinnerMessage, UserMessage } from '@/components/chat/message'
 import CourseInfo from '@/app/courses/components/course-info'
-import { getCoursesByLanguage } from '@/app/courses/actions'
+import { getCoursesByLanguage, getScript } from '@/app/courses/actions'
 
 async function submitUserMessage(content: string) {
   'use server'
@@ -48,6 +48,7 @@ async function submitUserMessage(content: string) {
     You and the user can discuss courses information and the user can adjust the fields of courses they want to update.
 
     If you want to get or query the courses information, call \`getCourses\`.
+    If you want to get or query the script information, call \`getScript\`.
 
     Besides that, you can also chat with users if needed.`,
     messages: [
@@ -141,6 +142,65 @@ async function submitUserMessage(content: string) {
                 </BotCard>
               ) :
               <BotMessage content="No courses found" />
+          )
+        }
+      },
+      getScript: {
+        description: 'Get or Query the script by course id and lesson id',
+        parameters: z.object({
+          course_id: z.string().describe('The course id of the script'),
+          lesson_id: z.number().describe('The lesson id of the script'),
+        }),
+        generate: async function* ({ course_id, lesson_id }) {
+          yield (
+            <BotCard>
+              <BotSkeleton />
+            </BotCard>
+          )
+
+          const script = await getScript(course_id, lesson_id);
+
+          const toolCallId = nanoid()
+
+          aiState.done({
+            ...aiState.get(),
+            messages: [
+              ...aiState.get().messages,
+              {
+                id: nanoid(),
+                role: 'assistant',
+                content: [
+                  {
+                    type: 'tool-call',
+                    toolName: 'getCourses',
+                    toolCallId,
+                    args: { course_id, lesson_id }
+                  }
+                ]
+              },
+              {
+                id: nanoid(),
+                role: 'tool',
+                content: [
+                  {
+                    type: 'tool-result',
+                    toolName: 'getCourses',
+                    toolCallId,
+                    result: script
+                  }
+                ]
+              }
+            ]
+          })
+
+          return (
+            script ?
+              (
+                <BotCard>
+                  {script.text}
+                </BotCard>
+              ) :
+              <BotMessage content="No script found" />
           )
         }
       },
