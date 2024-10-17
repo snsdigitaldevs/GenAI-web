@@ -39,13 +39,15 @@ export default function VocabularyRecallFrequency({ script, course }: Vocabulary
           defaultValue={historyUnitVocabularyRecallFrequencyList[historyUnitVocabularyRecallFrequencyList.length - 1].lesson} 
           className="w-full"
         >
-          <TabsList>
-            {historyUnitVocabularyRecallFrequencyList.map((historyUnitVocabularyRecallFrequency) => (
-              <TabsTrigger value={historyUnitVocabularyRecallFrequency.lesson}>
-                {historyUnitVocabularyRecallFrequency.lesson}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+          {historyUnitVocabularyRecallFrequencyList.length > 1 && (
+            <TabsList>
+              {historyUnitVocabularyRecallFrequencyList.map((historyUnitVocabularyRecallFrequency) => (
+                <TabsTrigger value={historyUnitVocabularyRecallFrequency.lesson}>
+                  {historyUnitVocabularyRecallFrequency.lesson}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          )}
           {historyUnitVocabularyRecallFrequencyList.map((historyUnitVocabularyRecallFrequency) => (
             <TabsContent 
               value={historyUnitVocabularyRecallFrequency.lesson} 
