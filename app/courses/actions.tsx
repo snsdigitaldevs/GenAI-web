@@ -2,7 +2,7 @@
 
 import { model } from "@/lib/ai";
 import UnitSchema, { Course, LanguageUnit, Script } from "@/lib/course/types";
-import { cookieBasedClient as client } from "@/lib/server";
+import { dataClient as client } from "@/lib/server";
 import { generateObject, generateText } from 'ai';
 
 export async function createCourse(course: Course) {

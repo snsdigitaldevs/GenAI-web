@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 
 import { auth } from '@/auth'
 import { type Chat } from '@/lib/types'
-import { cookieBasedClient as client } from "@/lib/server"
+import { dataClient as client } from "@/lib/server"
 
 export async function getChats(email?: string | null) {
   const session = await auth()

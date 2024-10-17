@@ -1,17 +1,15 @@
-import type { Schema } from '@/amplify/data/resource'
-import { generateServerClientUsingCookies, generateServerClientUsingReqRes } from '@aws-amplify/adapter-nextjs/data';
-import { Amplify } from 'aws-amplify';
+import {Amplify} from 'aws-amplify';
+import {generateClient} from 'aws-amplify/data';
 import outputs from "@/amplify_outputs.json";
-import { auth } from "@/auth";
-
-import { generateClient } from 'aws-amplify/data';
+import {auth} from "@/auth";
+import type {Schema} from '@/amplify/data/resource'
 
 
 Amplify.configure(outputs, {
   ssr: true,
   Auth: {
     tokenProvider: {
-      getTokens: async (forceRefresh) => {
+      getTokens: async (_) => {
         const session = await auth();
         return {
           accessToken: {
@@ -24,5 +22,5 @@ Amplify.configure(outputs, {
   }
 });
 
-export const cookieBasedClient = generateClient<Schema>();
+export const dataClient = generateClient<Schema>();
 

@@ -1,7 +1,7 @@
 'use server'
 
 import { Course } from "@/lib/course/types";
-import { cookieBasedClient as client } from "@/lib/server";
+import { dataClient as client } from "@/lib/server";
 
 export const getCourseById = async (id: string): Promise<Course> => {
   const course = await client.models.courses.get({ id });
