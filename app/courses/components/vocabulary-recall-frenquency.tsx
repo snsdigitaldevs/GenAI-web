@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface VocabularyRecallFrequencyProps {  
-  script: Script
-  course: Course
+  script: Script;
+  course: Course;
 }
 
 function countTargetOccurrences(text: string, target: string): number {
@@ -35,7 +35,10 @@ export default function VocabularyRecallFrequency({ script, course }: Vocabulary
         <CardTitle className="text-2xl font-bold">Vocabulary Recall Frequency</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue={historyUnitVocabularyRecallFrequencyList[0].lesson} className="w-full">
+        <Tabs 
+          defaultValue={historyUnitVocabularyRecallFrequencyList[historyUnitVocabularyRecallFrequencyList.length - 1].lesson} 
+          className="w-full"
+        >
           <TabsList>
             {historyUnitVocabularyRecallFrequencyList.map((historyUnitVocabularyRecallFrequency) => (
               <TabsTrigger value={historyUnitVocabularyRecallFrequency.lesson}>
