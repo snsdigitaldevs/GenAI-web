@@ -2,6 +2,7 @@ import { Course, LanguageUnit, Script } from "@/lib/course/types";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import random from "lodash/random";
 
 interface VocabularyRecallFrequencyProps {  
   script: Script;
@@ -43,7 +44,10 @@ export default function VocabularyRecallFrequency({ script, course }: Vocabulary
             {historyUnitVocabularyRecallFrequencyList.length > 1 && (
               <TabsList>
                 {historyUnitVocabularyRecallFrequencyList.map((historyUnitVocabularyRecallFrequency) => (
-                  <TabsTrigger value={historyUnitVocabularyRecallFrequency.lesson}>
+                  <TabsTrigger 
+                    value={historyUnitVocabularyRecallFrequency.lesson} 
+                    key={`tab-${historyUnitVocabularyRecallFrequency.lesson}`}
+                  >
                     {historyUnitVocabularyRecallFrequency.lesson}
                   </TabsTrigger>
                 ))}
@@ -52,7 +56,7 @@ export default function VocabularyRecallFrequency({ script, course }: Vocabulary
             {historyUnitVocabularyRecallFrequencyList.map((historyUnitVocabularyRecallFrequency) => (
               <TabsContent 
                 value={historyUnitVocabularyRecallFrequency.lesson} 
-                key={historyUnitVocabularyRecallFrequency.lesson} 
+                key={`tab-content-${historyUnitVocabularyRecallFrequency.lesson}`}
                 className="max-h-[600px] overflow-y-auto"
               >
                 <Table>
@@ -67,7 +71,7 @@ export default function VocabularyRecallFrequency({ script, course }: Vocabulary
                   <TableBody className="border-b-[1px] border-[#E2E8F0]">
                     {historyUnitVocabularyRecallFrequency.vocabularyRecallFrequency.map(
                       ({ unit, origin, target, recallFrequency }) => (
-                      <TableRow key={unit}>
+                      <TableRow key={`${unit}-${origin}-${target}-${random(0, 1000000)}`}>
                         <TableCell className="w-[50px]">{unit}</TableCell>
                         <TableCell className="w-[180px]">{origin}</TableCell>
                         <TableCell className="w-[180px]">{target}</TableCell>

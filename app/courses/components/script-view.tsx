@@ -2,31 +2,28 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Course, Script } from "@/lib/course/types";
+import { Script } from "@/lib/course/types";
 import { MagicWandIcon } from "@radix-ui/react-icons";
-import { generateScript, updateScriptText } from "../actions";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Loader2, Pencil, RefreshCw, ArrowLeft } from "lucide-react";
 import { JSONContent } from "novel";
 import TailwindAdvancedEditor from "@/components/editor/advanced-editor";
 
-export default function ScriptView({ script, course }: { script: Script, course: Course }) {
-  const [scriptText, setScriptText] = useState(script.text)
+interface ScriptViewProps {
+  script: Script;
+  generateScript: () => Promise<void>;
+  saveScriptContent: (content: string) => Promise<void>;
+}
+
+export default function ScriptView({ script, generateScript, saveScriptContent }: ScriptViewProps) {
   const [loading, setLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false);
 
   const generate = async () => {
-    setLoading(true)
-    const text = await generateScript(script.lessonId, course)
-    await updateScriptText(script.id, text)
-    setScriptText(text)
-    setLoading(false)
+    setLoading(true);
+    await generateScript();
+    setLoading(false);
   }
-
-  const saveContent = useCallback(async (content: string) => {
-    await updateScriptText(script.id, content);
-    setScriptText(content);
-  }, [script.id]);
 
   const convertToEditorContent = (text: string): JSONContent => {
     const lines = text.split('\n');
@@ -50,7 +47,7 @@ export default function ScriptView({ script, course }: { script: Script, course:
   }
 
   return (
-    scriptText ? (
+    script.text ? (
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold">Script</CardTitle>
@@ -75,9 +72,9 @@ export default function ScriptView({ script, course }: { script: Script, course:
         </CardHeader>
         <CardContent className="max-h-[800px] overflow-y-auto">
           {isEditing ? (
-            <TailwindAdvancedEditor defaultEditorContent={convertToEditorContent(scriptText)} onSave={saveContent} />
+            <TailwindAdvancedEditor defaultEditorContent={convertToEditorContent(script.text)} onSave={saveScriptContent} />
           ) : (
-            <div className="whitespace-pre-wrap">{scriptText}</div>
+            <div className="whitespace-pre-wrap">{script.text}</div>
           )}
         </CardContent>
       </Card>
