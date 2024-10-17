@@ -30,7 +30,7 @@ export default function LessonPage({ params }: { params: { id: string, lessonId:
   const saveScriptContent = useCallback(async (content: string) => {
     await updateScriptText(script.id, content);
     setScript({ ...script, text: content });
-  }, [script.id]);
+  }, [script]);
 
   if (!course) {
     return <div className="flex items-center justify-center h-screen">
