@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import random from "lodash/random";
+import upperFirst from "lodash/upperFirst";
 
 interface VocabularyRecallFrequencyProps {  
   script: Script;
@@ -63,8 +64,8 @@ export default function VocabularyRecallFrequency({ script, course }: Vocabulary
                   <TableHeader className="bg-[#F8FAFC] h-14">
                     <TableRow>
                       <TableHead className="w-[50px]">Lesson</TableHead>
-                      <TableHead className="w-[180px]">{course.origin.toUpperCase()}</TableHead>
-                      <TableHead className="w-[180px]">{course.target.toUpperCase()}</TableHead>
+                      <TableHead className="w-[180px]">{upperFirst(course.origin)}</TableHead>
+                      <TableHead className="w-[180px]">{upperFirst(course.target)}</TableHead>
                       <TableHead className="w-[50px]">Recall frequency</TableHead>
                     </TableRow>
                   </TableHeader>
