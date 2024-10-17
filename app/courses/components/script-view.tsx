@@ -11,7 +11,6 @@ import { JSONContent } from "novel";
 import TailwindAdvancedEditor from "@/components/editor/advanced-editor";
 
 export default function ScriptView({ script, course }: { script: Script, course: Course }) {
-
   const [scriptText, setScriptText] = useState(script.text)
   const [loading, setLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false);

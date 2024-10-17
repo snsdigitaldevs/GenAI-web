@@ -3,7 +3,7 @@ import ScriptView from '@/app/courses/components/script-view';
 import { getCourse, getScript } from "@/app/courses/actions"
 import { notFound } from 'next/navigation';
 import LessonEditor from '@/app/courses/components/lesson-editor';
-import VocabularyRecallFrequency from '@/app/courses/components/vocabulary-recall-frenquency';
+import VocabularyRecallFrequency from '@/app/courses/components/vocabulary-recall-frequency';
 
 export default async function LessonPage({ params }: { params: { id: string, lessonId: string } }) {
   const course = await getCourse(params.id)
