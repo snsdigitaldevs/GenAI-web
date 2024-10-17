@@ -35,49 +35,58 @@ export default function VocabularyRecallFrequency({ script, course }: Vocabulary
         <CardTitle className="text-2xl font-bold">Vocabulary Recall Frequency</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs 
-          defaultValue={historyUnitVocabularyRecallFrequencyList[historyUnitVocabularyRecallFrequencyList.length - 1].lesson} 
-          className="w-full"
-        >
-          {historyUnitVocabularyRecallFrequencyList.length > 1 && (
-            <TabsList>
-              {historyUnitVocabularyRecallFrequencyList.map((historyUnitVocabularyRecallFrequency) => (
-                <TabsTrigger value={historyUnitVocabularyRecallFrequency.lesson}>
-                  {historyUnitVocabularyRecallFrequency.lesson}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          )}
-          {historyUnitVocabularyRecallFrequencyList.map((historyUnitVocabularyRecallFrequency) => (
-            <TabsContent 
-              value={historyUnitVocabularyRecallFrequency.lesson} 
-              key={historyUnitVocabularyRecallFrequency.lesson} 
-              className="max-h-[600px] overflow-y-auto"
-            >
-              <Table>
-                <TableHeader className="bg-[#F8FAFC] h-14">
-                  <TableRow>
-                    <TableHead className="w-[50px]">Lesson</TableHead>
-                    <TableHead className="w-[180px]">{course.origin.toUpperCase()}</TableHead>
-                    <TableHead className="w-[180px]">{course.target.toUpperCase()}</TableHead>
-                    <TableHead className="w-[50px]">Recall frequency</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody className="border-b-[1px] border-[#E2E8F0]">
-                  {historyUnitVocabularyRecallFrequency.vocabularyRecallFrequency.map(
-                    ({ unit, origin, target, recallFrequency }) => (
-                    <TableRow key={unit}>
-                      <TableCell className="w-[50px]">{unit}</TableCell>
-                      <TableCell className="w-[180px]">{origin}</TableCell>
-                      <TableCell className="w-[180px]">{target}</TableCell>
-                      <TableCell className="w-[50px]">{recallFrequency}</TableCell>
+        {script.text ? (
+          <Tabs 
+            defaultValue={historyUnitVocabularyRecallFrequencyList[historyUnitVocabularyRecallFrequencyList.length - 1].lesson} 
+            className="w-full"
+          >
+            {historyUnitVocabularyRecallFrequencyList.length > 1 && (
+              <TabsList>
+                {historyUnitVocabularyRecallFrequencyList.map((historyUnitVocabularyRecallFrequency) => (
+                  <TabsTrigger value={historyUnitVocabularyRecallFrequency.lesson}>
+                    {historyUnitVocabularyRecallFrequency.lesson}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            )}
+            {historyUnitVocabularyRecallFrequencyList.map((historyUnitVocabularyRecallFrequency) => (
+              <TabsContent 
+                value={historyUnitVocabularyRecallFrequency.lesson} 
+                key={historyUnitVocabularyRecallFrequency.lesson} 
+                className="max-h-[600px] overflow-y-auto"
+              >
+                <Table>
+                  <TableHeader className="bg-[#F8FAFC] h-14">
+                    <TableRow>
+                      <TableHead className="w-[50px]">Lesson</TableHead>
+                      <TableHead className="w-[180px]">{course.origin.toUpperCase()}</TableHead>
+                      <TableHead className="w-[180px]">{course.target.toUpperCase()}</TableHead>
+                      <TableHead className="w-[50px]">Recall frequency</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TabsContent>
-          ))}
-        </Tabs>
+                  </TableHeader>
+                  <TableBody className="border-b-[1px] border-[#E2E8F0]">
+                    {historyUnitVocabularyRecallFrequency.vocabularyRecallFrequency.map(
+                      ({ unit, origin, target, recallFrequency }) => (
+                      <TableRow key={unit}>
+                        <TableCell className="w-[50px]">{unit}</TableCell>
+                        <TableCell className="w-[180px]">{origin}</TableCell>
+                        <TableCell className="w-[180px]">{target}</TableCell>
+                        <TableCell className="w-[50px]">{recallFrequency}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TabsContent>
+            ))}
+          </Tabs>
+        ) : (
+          <div className="flex flex-col items-center justify-center min-h-[200px] space-y-4">
+            <p className="text-xl font-semibold">You have no Script yet</p>
+            <p className="text-gray-600 text-center">
+              Please generate script first
+            </p>
+          </div>
+        )}
       </CardContent>
     </Card>
   )
