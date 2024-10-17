@@ -3,6 +3,7 @@ import ScriptView from '@/app/courses/components/script-view';
 import { getCourse, getScript } from "@/app/courses/actions"
 import { notFound } from 'next/navigation';
 import LessonEditor from '@/app/courses/components/lesson-editor';
+import VocabularyRecallFrequency from '@/app/courses/components/vocabulary-recall-frenquency';
 
 export default async function LessonPage({ params }: { params: { id: string, lessonId: string } }) {
   const course = await getCourse(params.id)
@@ -19,6 +20,7 @@ export default async function LessonPage({ params }: { params: { id: string, les
       <LessonEditor course={course} lessonId={params.lessonId} />
       <ScriptPromptEditor script={script} />
       <ScriptView script={script} course={course} />
+      <VocabularyRecallFrequency script={script} course={course} />
     </div>
   );
 }
