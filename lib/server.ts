@@ -22,5 +22,7 @@ Amplify.configure(outputs, {
   }
 });
 
-export const dataClient = generateClient<Schema>();
+export const dataClient = generateClient<Schema>({
+  authMode: 'oidc'
+});
 
