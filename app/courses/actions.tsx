@@ -19,6 +19,22 @@ export async function getCourse(courseId: string) {
   return data as unknown as Course
 }
 
+export async function getCoursesByLanguage(origin: string, target: string) {
+  console.log("getCoursesByLanguage", origin, target)
+  const { data, errors } = await client.models.courses.list({
+    filter: {
+      origin: { eq: origin },
+      target: { eq: target },
+    },
+  });
+  if (errors) {
+    console.error(`getCoursesByLanguage error: ${errors}`)
+    throw new Error(`getCoursesByLanguage error: ${errors}`)
+  }
+  console.log("getCoursesByLanguage", data)
+  return data as unknown as Course[];
+}
+
 export async function getScript(courseId: string, lessonId: number): Promise<Script> {
   const { data, errors } = await client.models.scripts.list({
     filter: {

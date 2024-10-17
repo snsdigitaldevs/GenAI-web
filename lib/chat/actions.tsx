@@ -12,11 +12,13 @@ import { model } from '@/lib/ai'
 
 import { z } from 'zod'
 
-import { nanoid } from '@/lib/utils'
+import { nanoid, sleep } from '@/lib/utils'
 import { saveChat } from '@/app/actions'
 import { Chat, Message } from '@/lib/types'
 import { auth } from '@/auth'
-import { BotMessage, SpinnerMessage, UserMessage } from '@/components/chat/message'
+import { BotCard, BotMessage, BotSkeleton, SpinnerMessage, UserMessage } from '@/components/chat/message'
+import CourseInfo from '@/app/courses/components/course-info'
+import { getCoursesByLanguage } from '@/app/courses/actions'
 
 async function submitUserMessage(content: string) {
   'use server'
@@ -41,6 +43,13 @@ async function submitUserMessage(content: string) {
   const result = await streamUI({
     model: model,
     initial: <SpinnerMessage />,
+    system: `\
+    You are a courses management conversation bot and you can help users get courses information.
+    You and the user can discuss courses information and the user can adjust the fields of courses they want to update.
+
+    If you want to get or query the courses information, call \`getCourses\`.
+
+    Besides that, you can also chat with users if needed.`,
     messages: [
       ...aiState.get().messages.map((message: any) => ({
         role: message.role,
@@ -73,6 +82,69 @@ async function submitUserMessage(content: string) {
 
       return textNode
     },
+    tools: {
+      getCourses: {
+        description: 'Get or Query the courses by language',
+        parameters: z.object({
+          origin_language: z.string().describe('The origin language of the course'),
+          target_language: z.string().describe('The target language of the course'),
+        }),
+        generate: async function* ({ origin_language, target_language }) {
+          yield (
+            <BotCard>
+              <BotSkeleton />
+            </BotCard>
+          )
+
+          const courses = await getCoursesByLanguage(origin_language, target_language);
+
+          const toolCallId = nanoid()
+
+          aiState.done({
+            ...aiState.get(),
+            messages: [
+              ...aiState.get().messages,
+              {
+                id: nanoid(),
+                role: 'assistant',
+                content: [
+                  {
+                    type: 'tool-call',
+                    toolName: 'getCourses',
+                    toolCallId,
+                    args: { origin_language, target_language }
+                  }
+                ]
+              },
+              {
+                id: nanoid(),
+                role: 'tool',
+                content: [
+                  {
+                    type: 'tool-result',
+                    toolName: 'getCourses',
+                    toolCallId,
+                    result: courses
+                  }
+                ]
+              }
+            ]
+          })
+
+          return (
+            courses?.length > 0 ?
+              (
+                <BotCard>
+                  {courses.map((course) => (
+                    <CourseInfo key={course.id} course={course} />
+                  ))}
+                </BotCard>
+              ) :
+              <BotMessage content="No courses found" />
+          )
+        }
+      },
+    }
   })
 
   return {
@@ -134,7 +206,7 @@ export const AI = createAI<AIState, UIState>({
       id: chatId,
       title,
       email,
-      createdAt: createdAt.toISOString(), 
+      createdAt: createdAt.toISOString(),
       messages,
       path
     }

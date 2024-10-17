@@ -9,6 +9,7 @@ type CourseInfoItem = {
 
 export default function CourseInfo({ course }: { course: Course }) {
   const courseInfoItems = (course: Course): CourseInfoItem[] => [
+    { label: "Course ID", value: course.id },
     { label: "Origin Language", value: course.origin },
     { label: "Target Language", value: course.target },
     { label: "Description", value: course.description || "" },
