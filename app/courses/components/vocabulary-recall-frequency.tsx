@@ -10,6 +10,10 @@ interface VocabularyRecallFrequencyProps {
   course: Course;
 }
 
+function escapeRegExp(string: string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function countTargetOccurrences(text: string, target: string): number {
   const regex = new RegExp(target, 'gi');
   const matches = text?.match(regex);
@@ -27,7 +31,7 @@ export default function VocabularyRecallFrequency({ script, course }: Vocabulary
       unit: historyLanguageUnit.unit,
       origin: vocabularyPair.origin,
       target: vocabularyPair.target,
-      recallFrequency: countTargetOccurrences(script.text, vocabularyPair.target)
+      recallFrequency: countTargetOccurrences(script.text, escapeRegExp(vocabularyPair.target))
     }))
   }));
   
