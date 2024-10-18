@@ -94,7 +94,7 @@ export function BotCard({
       >
         <IconOpenAI />
       </div>
-      <div className="ml-4 flex-1 pl-2">{children}</div>
+      <div className="ml-4 flex-1 pl-2 whitespace-pre-wrap">{children}</div>
     </div>
   )
 }

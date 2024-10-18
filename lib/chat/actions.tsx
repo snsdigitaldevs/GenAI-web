@@ -19,6 +19,7 @@ import { auth } from '@/auth'
 import { BotCard, BotMessage, BotSkeleton, SpinnerMessage, UserMessage } from '@/components/chat/message'
 import CourseInfo from '@/app/courses/components/course-info'
 import { getCoursesByLanguage, getScript } from '@/app/courses/actions'
+import { Course } from '../course/types'
 
 async function submitUserMessage(content: string) {
   'use server'
@@ -91,11 +92,6 @@ async function submitUserMessage(content: string) {
           target_language: z.string().describe('The target language of the course'),
         }),
         generate: async function* ({ origin_language, target_language }) {
-          yield (
-            <BotCard>
-              <BotSkeleton />
-            </BotCard>
-          )
 
           const courses = await getCoursesByLanguage(origin_language, target_language);
 
@@ -125,7 +121,10 @@ async function submitUserMessage(content: string) {
                     type: 'tool-result',
                     toolName: 'getCourses',
                     toolCallId,
-                    result: courses
+                    result: courses.map((course) => {
+                      const { structure_vocabulary, updatedAt, ...rest } = course;
+                      return rest;
+                    })
                   }
                 ]
               }
@@ -152,11 +151,6 @@ async function submitUserMessage(content: string) {
           lesson_id: z.number().describe('The lesson id of the script'),
         }),
         generate: async function* ({ course_id, lesson_id }) {
-          yield (
-            <BotCard>
-              <BotSkeleton />
-            </BotCard>
-          )
 
           const script = await getScript(course_id, lesson_id);
 
@@ -184,9 +178,9 @@ async function submitUserMessage(content: string) {
                 content: [
                   {
                     type: 'tool-result',
-                    toolName: 'getCourses',
+                    toolName: 'getScript',
                     toolCallId,
-                    result: script
+                    result: script.text
                   }
                 ]
               }
@@ -281,11 +275,27 @@ export const getUIStateFromAIState = (aiState: Chat) => {
     .map((message, index) => ({
       id: `${aiState.chatId}-${index}`,
       display:
-        message.role === 'user' ? (
-          <UserMessage>{message.content as string}</UserMessage>
-        ) : message.role === 'assistant' &&
-          typeof message.content === 'string' ? (
-          <BotMessage content={message.content} />
-        ) : null
+      message.role === 'tool' ? (
+        message.content.map(tool => {
+          return tool.toolName === 'getCourses' ? (
+            <BotCard>
+              {/* @ts-expect-error */}
+              {tool.result.map((course: Course) => (
+                <CourseInfo key={course.id} course={course} />
+              ))}
+            </BotCard>
+          ) : tool.toolName === 'getScript' ? (
+            <BotCard>
+              {/* @ts-expect-error */}
+              {tool.result}
+            </BotCard>
+          ) : null
+        })
+      ) : message.role === 'user' ? (
+        <UserMessage>{message.content as string}</UserMessage>
+      ) : message.role === 'assistant' &&
+        typeof message.content === 'string' ? (
+        <BotMessage content={message.content} />
+      ) : null
     }))
 }
