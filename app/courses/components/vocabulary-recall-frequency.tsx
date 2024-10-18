@@ -10,14 +10,19 @@ interface VocabularyRecallFrequencyProps {
   course: Course;
 }
 
-function escapeRegExp(string: string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function getFormattedText(text: string) {
+  let formattedText = text;
+  const specialCharacters = ["(", "[", "{", "/"];
+  specialCharacters.forEach((character) => {
+    formattedText = formattedText.split(character)[0].trim();
+  })
+  return formattedText;
 }
 
 function countTargetOccurrences(text: string, target: string): number {
-  const regex = new RegExp(target, 'gi');
+  const regex = new RegExp(`\\b${target}\\b`, 'gi');
   const matches = text?.match(regex);
-  return matches ? matches.length : 0;
+  return target ? (matches ? matches.length : 0) : 0;
 }
 
 export default function VocabularyRecallFrequency({ script, course }: VocabularyRecallFrequencyProps) {
@@ -31,7 +36,7 @@ export default function VocabularyRecallFrequency({ script, course }: Vocabulary
       unit: historyLanguageUnit.unit,
       origin: vocabularyPair.origin,
       target: vocabularyPair.target,
-      recallFrequency: countTargetOccurrences(script.text, escapeRegExp(vocabularyPair.target))
+      recallFrequency: countTargetOccurrences(script.text, getFormattedText(vocabularyPair.target))
     }))
   }));
   
